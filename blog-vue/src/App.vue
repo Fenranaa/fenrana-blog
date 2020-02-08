@@ -11,5 +11,13 @@ body,
   height: 100%;
   margin: 0;
   padding: 0;
+
+  .el-drawer__body {
+    overflow-y: auto !important;
+  }
+}
+
+.el-drawer__body {
+  overflow-y: auto !important;
 }
 </style>

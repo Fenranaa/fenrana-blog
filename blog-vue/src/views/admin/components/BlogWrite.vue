@@ -9,26 +9,9 @@
       <el-button type="primary" @click="openDraewr()">发布</el-button>
       <el-button type="info">附件库</el-button>
     </div>
-    <!--抽屉 start-->
-    <drawer
-      :visible.sync="dialogVisible"
-      :headerShow="true"
-      header-background="#f5f5f5"
-      title-color="#000"
-      main-background="#EBEEF5"
-      :footerShow="true"
-      footer-height="60px"
-      footer-background="#f5f5f5"
-      width="500px"
-      height="300px"
-      align="right"
-      close-on-click-modal
-      :loading.sync="loading"
-      loadingColor="#ff6700"
-      title="文章设置"
-    >
+    <el-drawer title="文章设置" :visible.sync="dialogVisible" size="25%">
       <!--内容区 start-->
-      <div>
+      <div class="drawer-con">
         <!--日期选择 start-->
         <div class="date">
           <span class="demonstration">发表时间 :</span>
@@ -89,6 +72,7 @@
             multiple
             placeholder="请选择"
             style="width: 420px;"
+            value="1"
           >
             <el-option
               v-for="item in tagOptions"
@@ -119,30 +103,38 @@
           <span>缩略图</span>
           <el-image :src="cover"></el-image>
           <div class="aaa">
-            <el-button type="success" plain>附件库</el-button>
+            <el-button type="success" plain @click="innerDrawer = true"
+              >附件库</el-button
+            >
             <el-button type="info" plain>上传附件</el-button>
           </div>
-          <el-input v-model="cover2" placeholder="可以输入封面图片地址">
+          <el-input v-model="cover" placeholder="可以输入封面图片地址">
           </el-input>
         </div>
         <!--缩略图 end-->
       </div>
       <!--内容区 end -->
-      <!--抽屉底部 start-->
-      <div slot="footer" class="drawer-footer">
+      <div class="drawer-footer">
         <el-button type="warning">保存草稿</el-button>
         <el-button type="primary" @click="addArticle">发布</el-button>
       </div>
-      <!--抽屉底部 end-->
-    </drawer>
-    <!--抽屉 end-->
+      <div>
+        <el-drawer
+          title="附件库"
+          size="20%"
+          :append-to-body="true"
+          :before-close="handleClose"
+          :visible.sync="innerDrawer"
+        >
+          <p>_(:зゝ∠)_</p>
+        </el-drawer>
+      </div>
+    </el-drawer>
   </div>
 </template>
 
 <script>
 import { mapState, mapActions, mapMutations } from "vuex";
-// import AdminFooter from "./AdminFooter";
-import drawer from "./drawer";
 export default {
   data() {
     return {
@@ -157,16 +149,25 @@ export default {
       cover: "//i.loli.net/2019/05/05/5ccf007c0a01d.png",
       cover2: "",
       loading: false,
-      dialogVisible: false //控制抽屉
+      dialogVisible: false, //控制抽屉
+      innerDrawer: false
     };
   },
-  components: {
-    drawer
+  components: {},
+  created() {
+    const art = this.$route.query.data;
+    if (art !== undefined) {
+      window.console.log(art);
+      this.title = art.title;
+      this.blog = art.content;
+    }
   },
-  created() {},
   methods: {
     ...mapActions(["setTitleAsyns", "SetBlogAsyns"]),
     ...mapMutations(["setTitle"]),
+    handleClose(done) {
+      done();
+    },
     //标签的初始化方法
     initTag() {
       this.axios
@@ -350,10 +351,20 @@ export default {
     margin-bottom: 8px;
   }
 }
-
+.drawer-con {
+  padding-bottom: 70px;
+}
 .drawer-footer {
+  position: absolute;
+  /*border: #42b983 solid 1px;*/
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 60px;
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  background: #42b983;
+  padding-right: 20px;
 }
 </style>

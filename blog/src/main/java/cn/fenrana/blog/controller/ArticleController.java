@@ -9,6 +9,7 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.Query;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.api.R;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -91,13 +92,13 @@ public class ArticleController {
      * 查询文章
      * */
     @PostMapping("admin/articles")
-    public ResultJson<Map> articleList(@RequestBody PageQuery pageQuery) {
+    public ResultJson<Map<String, Object>> articleList(@RequestBody PageQuery pageQuery) {
         Page<Article> page = new Page<>();
         page.setCurrent(pageQuery.getCurrent());
         page.setSize(pageQuery.getSize());
         QueryWrapper<Article> queryWrapper = new QueryWrapper<>();
         //要查询的列
-        queryWrapper.select("id", "title", "cover", "category", "state", "publish_time", "create_time", "type", "visits", "summary", "disallowComment", "is_top");
+        queryWrapper.select("id", "title", "cover","content", "category", "state", "publish_time", "create_time", "type", "visits", "summary", "disallowComment", "is_top");
         //根据标题模糊查询调价
         if (StrUtil.isNotBlank(pageQuery.getSearchKey())) {
             queryWrapper.like("title", pageQuery.getSearchKey());
@@ -172,7 +173,7 @@ public class ArticleController {
      * 文章的删除
      * */
     @GetMapping("admin/articleDelete/{id}")
-    public ResultJson articleDelete(@PathVariable Long id){
+    public ResultJson<Object> articleDelete(@PathVariable Long id){
         if(iArticleService.removeById(id)){
             return ResultJson.ok();
         }else {

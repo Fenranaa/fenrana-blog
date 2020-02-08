@@ -181,7 +181,6 @@ export default {
       this.axios
         .get(api.categorys)
         .then(response => {
-          window.console.log(response.data);
           this.categoryOptions = response.data.data;
         })
         .catch(error => {
@@ -193,7 +192,6 @@ export default {
       this.axios
         .post(api.articles, pageQuery)
         .then(response => {
-          window.console.log(response.data);
           if (response.data.code === 200) {
             this.tableData = response.data.data.data;
             this.total = response.data.data.total;
@@ -212,8 +210,14 @@ export default {
     init() {
       this.initCategory();
     },
+    //跳转到文章编辑界面
     handleEdit(index, row) {
-      window.console.log(index, row);
+      this.$router.push({
+        path: "/admin/blog/write",
+        query: {
+          data: row
+        }
+      });
     },
     //文章彻底删除
     articleDelete(row) {
@@ -238,7 +242,6 @@ export default {
             this.axios
               .get(url)
               .then(response => {
-                window.console.log(response.data);
                 if (response.data.code === 200) {
                   done();
                   instance.confirmButtonLoading = false;

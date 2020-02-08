@@ -39,20 +39,20 @@ public class ResultJson<T> implements Serializable {
         this.code =  code;
         this.msg = msg;
     }
-    public static ResultJson ok(){
-        return new ResultJson();
+    public static <T> ResultJson<T> ok(){
+        return new ResultJson<>();
     }
 
     public static <T> ResultJson<T> ok(T data){
-        return new ResultJson(data);
+        return new ResultJson<>(data);
     }
 
     public static <T> ResultJson<T> fail(){
-        return new ResultJson(HttpStatus.INTERNAL_SERVER_ERROR.value(), "内部错误");
+        return new ResultJson<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), "内部错误");
     }
 
     public static <T> ResultJson<T> fail(int code, String msg){
-        return new ResultJson(code, msg);
+        return new ResultJson<>(code, msg);
     }
 
 
