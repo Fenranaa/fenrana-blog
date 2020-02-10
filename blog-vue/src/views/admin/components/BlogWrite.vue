@@ -9,6 +9,8 @@
       <el-button type="primary" @click="openDraewr()">发布</el-button>
       <el-button type="info">附件库</el-button>
     </div>
+
+    <!-- 侧边栏 start   -->
     <el-drawer title="文章设置" :visible.sync="dialogVisible" size="25%">
       <!--内容区 start-->
       <div class="drawer-con">
@@ -101,12 +103,14 @@
         <!--缩略图 start-->
         <div class="comment">
           <span>缩略图</span>
-          <el-image :src="cover"></el-image>
+          <el-image :src="cover" @click="openAttachmentDrawer()"></el-image>
           <div class="aaa">
-            <el-button type="success" plain @click="innerDrawer = true"
+            <el-button type="success" plain @click="openAttachmentDrawer()"
               >附件库</el-button
             >
-            <el-button type="info" plain>上传附件</el-button>
+            <el-button type="info" @click="uploadVisible = true"
+              >上传附件</el-button
+            >
           </div>
           <el-input v-model="cover" placeholder="可以输入封面图片地址">
           </el-input>
@@ -124,17 +128,41 @@
           size="20%"
           :append-to-body="true"
           :before-close="handleClose"
-          :visible.sync="innerDrawer"
+          :visible.sync="attachmentDrawer"
         >
-          <p>_(:зゝ∠)_</p>
+          <div class="attachment-drawer-con">
+            <div style="width: 100px;height: 100px;">
+              <el-image src="http://localhost:8081/upload/a-4vesr13.jpg">
+                <div slot="error" class="image-slot">
+                  <i class="el-icon-picture-outline"></i>
+                </div>
+              </el-image>
+            </div>
+          </div>
         </el-drawer>
       </div>
     </el-drawer>
+    <!-- 侧边栏end   -->
+    <!-- 文件上传弹框 start  -->
+    <el-dialog title="文件上传" width="20%" :visible.sync="uploadVisible">
+      <el-upload
+        class="upload-demo"
+        name="files"
+        drag
+        action="http://localhost:8081/admin/file/upload"
+        multiple
+      >
+        <i class="el-icon-upload"></i>
+        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+      </el-upload>
+    </el-dialog>
+    <!-- 文件上传弹框 end   -->
   </div>
 </template>
 
 <script>
 import { mapState, mapActions, mapMutations } from "vuex";
+import api from "@/api/urls";
 export default {
   data() {
     return {
@@ -147,10 +175,11 @@ export default {
       tag: "",
       summary: "",
       cover: "//i.loli.net/2019/05/05/5ccf007c0a01d.png",
-      cover2: "",
       loading: false,
       dialogVisible: false, //控制抽屉
-      innerDrawer: false
+      attachmentDrawer: false,
+      uploadVisible: false,
+      uploadUrl: api.uploadFile
     };
   },
   components: {},
@@ -279,6 +308,10 @@ export default {
         .catch(error => {
           window.console.log(error);
         });
+    },
+    //打开附件侧边栏
+    openAttachmentDrawer() {
+      this.attachmentDrawer = true;
     }
   },
   computed: {
@@ -364,7 +397,10 @@ export default {
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  background: #42b983;
+  background: #ffffff;
+  border-top: #dcdfe6 solid 1px;
   padding-right: 20px;
+}
+.attachment-drawer-con {
 }
 </style>

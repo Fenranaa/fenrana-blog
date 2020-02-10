@@ -3,6 +3,7 @@ const baseUrl = "http://localhost:8081";
 export default {
   articles: baseUrl + "/admin/articles",
   categorys: baseUrl + "/admin/categorys",
+  uploadFile: baseUrl + "/admin/file/upload",
   articlesRecycle(id) {
     return baseUrl + "/admin/articlesRecycle/" + id;
   },

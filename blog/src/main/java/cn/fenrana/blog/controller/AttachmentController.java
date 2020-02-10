@@ -5,12 +5,15 @@ import cn.fenrana.blog.entity.Article;
 import cn.fenrana.blog.entity.Attachment;
 import cn.fenrana.blog.service.IAttachmentService;
 import cn.fenrana.blog.utils.ResultJson;
+import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.Delete;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.util.List;
 
 /**
@@ -30,16 +33,24 @@ public class AttachmentController {
 
     /**
      * 分页返回附件数据信息
-     * @return currnt 当前页
-     * @return size 查询的条数
-     * */
+     *
+     * @param current 当前页
+     * @param size    查询的条数
+     * @param suffix 文件后缀
+     */
     @GetMapping
-    public ResultJson<IPage<Attachment>> files(@RequestParam(defaultValue = "1") Integer current, @RequestParam(defaultValue = "10") Integer size) {
+    public ResultJson<IPage<Attachment>> files(@RequestParam(defaultValue = "1") Integer current, @RequestParam(defaultValue = "10") Integer size,
+                                               @RequestParam(defaultValue = "") String suffix) {
         try {
             Page<Attachment> page = new Page<>();
             page.setCurrent(current);
             page.setSize(size);
-            IPage<Attachment> attachmentIPage = attachmentService.page(page);
+            QueryWrapper<Attachment> queryWrapper = null;
+            if(StrUtil.isNotBlank(suffix)){
+                queryWrapper = new QueryWrapper<>();
+                queryWrapper.eq("suffix", suffix);
+            }
+            IPage<Attachment> attachmentIPage = attachmentService.page(page, queryWrapper);
             return ResultJson.ok(attachmentIPage);
         } catch (Exception e) {
             e.printStackTrace();
@@ -49,19 +60,18 @@ public class AttachmentController {
 
     /**
      * 删除附件
-     * */
+     */
     @DeleteMapping("/{id}")
-    public ResultJson<String> delete(@PathVariable Long id, @RequestParam String path)  {
+    public ResultJson<String> delete(@PathVariable Long id, @RequestParam String path) {
         return attachmentService.delete(id, path);
     }
 
     /**
      * 附件上传
-     * */
-    @PostMapping("/upload")
-    public ResultJson<List<String>> upload(@RequestParam("multipartFile") MultipartFile[] file) {
-
-        return attachmentService.upload(file);
+     */
+    @RequestMapping("/upload")
+    public ResultJson<List<String>> upload(@RequestParam("files") MultipartFile[] files) {
+        return attachmentService.upload(files);
     }
 
 }

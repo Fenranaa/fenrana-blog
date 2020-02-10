@@ -4,10 +4,6 @@ spring:
     url: jdbc:mysql://localhost/blog?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
     username: root
     password: fenrana
-#  mvc:
-#    static-path-pattern: /image/**
-#    resources:
-#      static-locations: classpath:/images/
 server:
   port: 8081
 mybatis-plus:
