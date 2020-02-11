@@ -5,8 +5,12 @@ import cn.fenrana.blog.mapper.AttachmentMapper;
 import cn.fenrana.blog.service.IAttachmentService;
 import cn.fenrana.blog.utils.ResultJson;
 import cn.hutool.core.util.RandomUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
@@ -16,7 +20,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Transactional
@@ -24,6 +30,12 @@ public class AttachmentServiceImpl extends ServiceImpl<AttachmentMapper, Attachm
 
     @Autowired
     private AttachmentMapper attachmentMapper;
+
+    @Value("${server.name}")
+    private String name;
+
+    @Value("${server.port}")
+    private String port;
     /**
      * 附件上传
      * */
@@ -107,5 +119,27 @@ public class AttachmentServiceImpl extends ServiceImpl<AttachmentMapper, Attachm
             e.printStackTrace();
             return ResultJson.fail();
         }
+    }
+
+    @Override
+    public ResultJson<Map<String, Object>> images(Integer current, Integer size) {
+        Page<Attachment> page = new Page<>();
+        page.setCurrent(current);
+        page.setSize(size);
+        QueryWrapper<Attachment> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("suffix", "png");
+        queryWrapper.or();
+        queryWrapper.eq("suffix", "jpg");
+//        IPage<Attachment> attachmentIPage = attachmentService.page(page, queryWrapper);
+        IPage<Attachment> attachmentIPage = attachmentMapper.selectPage(page, queryWrapper);
+        List<Attachment> records = attachmentIPage.getRecords();
+
+        records.forEach(item -> {
+            item.setPath("http://" + name + ":" + port + "/" + item.getPath());
+        });
+        Map<String, Object> dataMap = new HashMap<>();
+        dataMap.put("total", attachmentIPage.getTotal());
+        dataMap.put("data", records);
+        return ResultJson.ok(dataMap);
     }
 }

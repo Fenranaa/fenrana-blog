@@ -14,7 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -36,7 +38,7 @@ public class AttachmentController {
      *
      * @param current 当前页
      * @param size    查询的条数
-     * @param suffix 文件后缀
+     * @param suffix  文件后缀
      */
     @GetMapping
     public ResultJson<IPage<Attachment>> files(@RequestParam(defaultValue = "1") Integer current, @RequestParam(defaultValue = "10") Integer size,
@@ -45,13 +47,25 @@ public class AttachmentController {
             Page<Attachment> page = new Page<>();
             page.setCurrent(current);
             page.setSize(size);
-            QueryWrapper<Attachment> queryWrapper = null;
-            if(StrUtil.isNotBlank(suffix)){
-                queryWrapper = new QueryWrapper<>();
-                queryWrapper.eq("suffix", suffix);
-            }
-            IPage<Attachment> attachmentIPage = attachmentService.page(page, queryWrapper);
+
+            IPage<Attachment> attachmentIPage = attachmentService.page(page);
             return ResultJson.ok(attachmentIPage);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResultJson.fail();
+        }
+    }
+
+    /**
+     * 分页返回所有的图片
+     *
+     * @param current 当前页
+     * @param size    查询的条数
+     */
+    @GetMapping("/images")
+    public ResultJson<Map<String, Object>> images(@RequestParam(defaultValue = "1") Integer current, @RequestParam(defaultValue = "8") Integer size) {
+        try {
+            return attachmentService.images(current, size);
         } catch (Exception e) {
             e.printStackTrace();
             return ResultJson.fail();

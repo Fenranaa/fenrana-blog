@@ -103,9 +103,9 @@
         <!--缩略图 start-->
         <div class="comment">
           <span>缩略图</span>
-          <el-image :src="cover" @click="openAttachmentDrawer()"></el-image>
+          <el-image :src="cover" @click="attachmentDrawer = true"></el-image>
           <div class="aaa">
-            <el-button type="success" plain @click="openAttachmentDrawer()"
+            <el-button type="success" plain @click="attachmentDrawer = true"
               >附件库</el-button
             >
             <el-button type="info" @click="uploadVisible = true"
@@ -129,14 +129,47 @@
           :append-to-body="true"
           :before-close="handleClose"
           :visible.sync="attachmentDrawer"
+          @open="attachmentDrawerOpen()"
         >
           <div class="attachment-drawer-con">
-            <div style="width: 100px;height: 100px;">
-              <el-image src="http://localhost:8081/upload/a-4vesr13.jpg">
+            <div class="search">
+              <el-input
+                style="width:70%"
+                v-model="attachmentSearch"
+                placeholder="请输入图片名称"
+              ></el-input>
+              <el-button type="primary" icon="el-icon-search">搜索</el-button>
+            </div>
+            <el-divider></el-divider>
+            <div
+              class="content"
+              v-for="item in attachmentImages"
+              :key="item.id"
+            >
+              <el-image
+                fit="fit"
+                style="height: 100%; width: 100%;"
+                :src="item.path"
+                @click="attachmentImageClick(item.path)"
+              >
                 <div slot="error" class="image-slot">
                   <i class="el-icon-picture-outline"></i>
                 </div>
               </el-image>
+            </div>
+            <div class="page">
+              <el-pagination
+                background
+                layout="prev, pager, next"
+                :total="attachmentImageTotal"
+              >
+              </el-pagination>
+            </div>
+
+            <div class="drawer-footer">
+              <el-button type="primary" @click="uploadVisible = true"
+                >上传图片</el-button
+              >
             </div>
           </div>
         </el-drawer>
@@ -179,7 +212,10 @@ export default {
       dialogVisible: false, //控制抽屉
       attachmentDrawer: false,
       uploadVisible: false,
-      uploadUrl: api.uploadFile
+      uploadUrl: api.uploadFile,
+      attachmentSearch: "",
+      attachmentImages: [],
+      attachmentImageTotal: 0
     };
   },
   components: {},
@@ -200,9 +236,8 @@ export default {
     //标签的初始化方法
     initTag() {
       this.axios
-        .get("http://localhost:8081/admin/tags")
+        .get(api.tags)
         .then(response => {
-          window.console.log(response.data);
           this.tagOptions = response.data.data;
         })
         .catch(error => {
@@ -212,9 +247,8 @@ export default {
     //分类的初始化方法
     initCategory() {
       this.axios
-        .get("http://localhost:8081/admin/categorys")
+        .get(api.categorys)
         .then(response => {
-          window.console.log(response.data);
           this.categoryOptions = response.data.data;
         })
         .catch(error => {
@@ -278,20 +312,11 @@ export default {
         content: this.blog,
         summary: this.summary
       };
-      // article.title = this.title;
-      // article.createTime = this.date;
-      // article.publishTime = this.date;
-      // article.disallowComment = this.isComment;
-      // article.isTop = this.isTop;
-      // article.tag = this.tag.toString();
-      // article.category = this.category;
-      // article.content = this.blog;
-      // article.summary = this.summary;
       //TODO 这个需要处理
       article.cover = this.cover;
       window.console.log(article);
       this.axios
-        .post("http://localhost:8081/admin/addArticle", article)
+        .post(api.addArticle, article)
         .then(response => {
           if (response.data.code === 200) {
             this.$message({
@@ -309,9 +334,30 @@ export default {
           window.console.log(error);
         });
     },
-    //打开附件侧边栏
-    openAttachmentDrawer() {
-      this.attachmentDrawer = true;
+    // 附件侧边栏的打开回调
+    attachmentDrawerOpen() {
+      this.axios
+        .get(api.fileImages, {
+          params: {
+            current: 1,
+            size: 8
+          }
+        })
+        .then(response => {
+          if (response.data.code === 200) {
+            this.attachmentImages = response.data.data.data;
+            this.attachmentImageTotal = response.data.data.total;
+          }
+        })
+        .catch(error => {
+          window.console.log(error);
+        });
+    },
+    //附件图片的点击方法
+    attachmentImageClick(path) {
+      window.console.log(path);
+      this.cover = path;
+      this.attachmentDrawer = false;
     }
   },
   computed: {
@@ -402,5 +448,29 @@ export default {
   padding-right: 20px;
 }
 .attachment-drawer-con {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  align-items: center;
+  height: 80%;
+  align-content: flex-start;
+  /*background: #42b983;*/
+  .search {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    /*align-items: center;*/
+  }
+  .content {
+    width: 45%;
+    margin-top: 5px;
+    height: 140px;
+  }
+  .page {
+    width: 100%;
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-end;
+  }
 }
 </style>

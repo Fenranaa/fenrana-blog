@@ -4,6 +4,9 @@ export default {
   articles: baseUrl + "/admin/articles",
   categorys: baseUrl + "/admin/categorys",
   uploadFile: baseUrl + "/admin/file/upload",
+  tags: baseUrl + "/admin/tags",
+  fileImages: baseUrl + "/admin/file/images",
+  addArticle: baseUrl + "/admin/addArticle",
   articlesRecycle(id) {
     return baseUrl + "/admin/articlesRecycle/" + id;
   },
