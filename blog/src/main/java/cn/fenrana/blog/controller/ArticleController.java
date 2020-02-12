@@ -5,6 +5,7 @@ import cn.fenrana.blog.entity.*;
 import cn.fenrana.blog.entity.dto.ArticleDto;
 import cn.fenrana.blog.utils.ResultJson;
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.Query;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -40,8 +41,8 @@ public class ArticleController {
     @Autowired
     IArticleTagService iArticleTagService;
 
-    @Autowired
-    IArticleCategoryService iArticleCategoryService;
+//    @Autowired
+//    IArticleCategoryService iArticleCategoryService;
 
     @Autowired
     ICategoryService iCategoryService;
@@ -53,34 +54,14 @@ public class ArticleController {
      * 保存文章
      */
     @PostMapping(value = "/admin/addArticle")
-    public ResultJson addArticle(@RequestBody Map<String, Object> map) {
+    public ResultJson<Object> addArticle(@RequestBody Map<String, Object> map) {
         try {
-            //保存文章
-            Article article = BeanUtil.mapToBean(map, Article.class, false);
-            article.setAuthor("Fenrana");
-            article.setState("0");
-            article.setVisits(0);
-            //判断文章概要, 如果为空，截取内容的一部分 TODO 待完善
-            if (StrUtil.isNotBlank(article.getSummary())) {
-
+            if (ObjectUtil.isEmpty(map.get("id"))){
+                return iArticleService.addArticle(map);
+            }else {
+                return  iArticleService.updateArticle(map);
             }
-            iArticleService.save(article);
-            //保存标签
-            Long articleId = article.getId();
-            ArrayList<Integer> tags = (ArrayList) map.get("tag");
-            tags.forEach(
-                    item -> {
-                        ArticleTag articleTag = new ArticleTag();
-                        articleTag.setArticleId(articleId);
-                        articleTag.setTagId(Long.valueOf(item));
-                        iArticleTagService.save(articleTag);
-                    });
-            //保存分类
-            Integer categoryId = (Integer) map.get("category");
-            ArticleCategory articleCategory = new ArticleCategory();
-            articleCategory.setArticleId(articleId);
-            articleCategory.setCategoryId(Long.valueOf(categoryId));
-            return ResultJson.ok();
+
         } catch (Exception e) {
             e.printStackTrace();
             return ResultJson.fail();

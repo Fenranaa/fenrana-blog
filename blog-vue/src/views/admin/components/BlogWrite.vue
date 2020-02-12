@@ -200,6 +200,7 @@ export default {
   data() {
     return {
       date: "",
+      id: null,
       isComment: 1,
       isTop: 1,
       categoryOptions: [],
@@ -301,7 +302,8 @@ export default {
         });
         return;
       }
-      var article = {
+      const article = {
+        id: this.id,
         title: this.title,
         createTime: this.date,
         publishTime: this.date,
@@ -310,11 +312,9 @@ export default {
         tag: this.tag,
         category: this.category,
         content: this.blog,
-        summary: this.summary
+        summary: this.summary,
+        cover: this.cover
       };
-      //TODO 这个需要处理
-      article.cover = this.cover;
-      window.console.log(article);
       this.axios
         .post(api.addArticle, article)
         .then(response => {
