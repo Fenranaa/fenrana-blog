@@ -84,7 +84,7 @@ public class AttachmentController {
      * 附件上传
      */
     @RequestMapping("/upload")
-    public ResultJson<List<String>> upload(@RequestParam("files") MultipartFile[] files) {
+    public ResultJson<List<Attachment>> upload(@RequestParam("files") MultipartFile[] files) {
         return attachmentService.upload(files);
     }
 

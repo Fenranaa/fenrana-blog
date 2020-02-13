@@ -40,7 +40,7 @@ public class AttachmentServiceImpl extends ServiceImpl<AttachmentMapper, Attachm
      * 附件上传
      * */
     @Override
-    public String upload(MultipartFile multipartFile) {
+    public Attachment upload(MultipartFile multipartFile) {
 
         Attachment attachment = new Attachment();
 
@@ -69,7 +69,8 @@ public class AttachmentServiceImpl extends ServiceImpl<AttachmentMapper, Attachm
 
           multipartFile.transferTo(file);
           int insert = attachmentMapper.insert(attachment);
-          return filName;
+          attachment.setPath("http://" + name + ":" + port + "/" + attachment.getPath());
+          return attachment;
       } catch (Exception e){
           e.printStackTrace();
           throw new RuntimeException("图片上传失败");
@@ -82,14 +83,14 @@ public class AttachmentServiceImpl extends ServiceImpl<AttachmentMapper, Attachm
      * 批量上传文件
      * */
     @Override
-    public ResultJson<List<String>> upload(MultipartFile[] files) {
+    public ResultJson<List<Attachment>> upload(MultipartFile[] files) {
 
 
         try {
-            List<String> urls = new ArrayList<>();
+            List<Attachment> urls = new ArrayList<>();
             for (MultipartFile multipartFile : files) {
-                String url = upload(multipartFile);
-                urls.add(url);
+                Attachment attachment = upload(multipartFile);
+                urls.add(attachment);
             }
             return ResultJson.ok(urls);
         } catch (Exception e) {
@@ -130,6 +131,8 @@ public class AttachmentServiceImpl extends ServiceImpl<AttachmentMapper, Attachm
         queryWrapper.eq("suffix", "png");
         queryWrapper.or();
         queryWrapper.eq("suffix", "jpg");
+        queryWrapper.or();
+        queryWrapper.eq("suffix", "gif");
 //        IPage<Attachment> attachmentIPage = attachmentService.page(page, queryWrapper);
         IPage<Attachment> attachmentIPage = attachmentMapper.selectPage(page, queryWrapper);
         List<Attachment> records = attachmentIPage.getRecords();

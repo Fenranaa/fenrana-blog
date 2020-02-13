@@ -182,6 +182,7 @@
       <el-upload
         class="upload-demo"
         name="files"
+        :on-success="uploadSuccess"
         drag
         action="http://localhost:8081/admin/file/upload"
         multiple
@@ -367,6 +368,16 @@ export default {
       window.console.log(path);
       this.cover = path;
       this.attachmentDrawer = false;
+    },
+    // 文件上传成功的回调
+    uploadSuccess(response) {
+      if (response.code === 200) {
+        let imgs = response.data;
+        imgs.forEach(item => {
+          this.attachmentImageTotal += 1;
+          this.attachmentImages.push(item);
+        });
+      }
     }
   },
   computed: {

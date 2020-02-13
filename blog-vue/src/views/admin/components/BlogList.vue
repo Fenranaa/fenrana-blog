@@ -73,8 +73,9 @@
             <template slot-scope="scope">
               <el-tag
                 type="success"
-                v-for="item in scope.row.tags"
+                v-for="(item, index) in scope.row.tags"
                 :key="item.id"
+                :style="{ 'margin-left': index !== 0 ? '10px' : '0' }"
                 disable-transitions
                 >{{ item.name }}</el-tag
               >
@@ -317,7 +318,6 @@ export default {
   .list {
     margin-top: 15px;
     .content {
-      /*height: 800px;*/
     }
     .pagination {
       display: flex;

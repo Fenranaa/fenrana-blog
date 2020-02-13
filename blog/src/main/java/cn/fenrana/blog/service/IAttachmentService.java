@@ -14,12 +14,12 @@ public interface IAttachmentService extends IService<Attachment> {
     /**
      * 附件上传
      * */
-    String upload(MultipartFile multipartFile);
+    Attachment upload(MultipartFile multipartFile);
 
     /**
      * 批量上传
      * */
-    ResultJson<List<String>> upload(MultipartFile[] files);
+    ResultJson<List<Attachment>> upload(MultipartFile[] files);
     /**
      * 删除附件
      * */
