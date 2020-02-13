@@ -24,4 +24,6 @@ public interface IArticleService extends IService<Article> {
      * 博客的修改
      * */
     ResultJson<Object> updateArticle(Map<String, Object> map);
+
+    ResultJson<Object> articleDelete(Long id);
 }

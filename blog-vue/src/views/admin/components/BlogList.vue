@@ -66,7 +66,7 @@
             :formatter="formatterState"
           >
           </el-table-column>
-          <el-table-column prop="category" label="分类" width="130">
+          <el-table-column prop="category.name" label="分类" width="130">
           </el-table-column>
           <el-table-column prop="tag" label="标签">
             <!--            <el-tag type="success" disable-transitions>vim</el-tag>-->

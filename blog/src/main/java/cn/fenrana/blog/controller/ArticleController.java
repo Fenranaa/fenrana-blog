@@ -79,14 +79,14 @@ public class ArticleController {
         page.setSize(pageQuery.getSize());
         QueryWrapper<Article> queryWrapper = new QueryWrapper<>();
         //要查询的列
-        queryWrapper.select("id", "title", "cover","content", "category", "state", "publish_time", "create_time", "type", "visits", "summary", "disallowComment", "is_top");
+        queryWrapper.select("id", "title", "cover","content", "category_id", "state", "publish_time", "create_time", "type", "visits", "summary", "disallow_comment", "is_top");
         //根据标题模糊查询调价
         if (StrUtil.isNotBlank(pageQuery.getSearchKey())) {
             queryWrapper.like("title", pageQuery.getSearchKey());
         }
         Map<String, String> map = new HashMap<>();
         if (pageQuery.getCategoryId() != null) {
-            map.put("category", pageQuery.getCategoryId().toString());
+            map.put("category_id", pageQuery.getCategoryId().toString());
 
         }
         if (StrUtil.isNotBlank(pageQuery.getState())) {
@@ -104,20 +104,22 @@ public class ArticleController {
                     QueryWrapper<ArticleTag> articleTagQueryWrapper1 = new QueryWrapper<>();
                     articleTagQueryWrapper1.eq("article_id", item.getId());
                     List<ArticleTag> articleTags = iArticleTagService.list(articleTagQueryWrapper1);
-                    List<Long> collect =
+                    List<Long> tagsId =
                             articleTags.stream().map(ArticleTag::getTagId).collect(Collectors.toList());
-                    Collection<Tag> tags = iTagService.listByIds(collect);
+                    Collection<Tag> tags = iTagService.listByIds(tagsId);
 
                     //查分类
                     QueryWrapper<Category> categoryQueryWrapper = new QueryWrapper<>();
-                    categoryQueryWrapper.eq("id", item.getCategory());
+                    categoryQueryWrapper.eq("id", item.getCategoryId());
                     Category category = iCategoryService.getOne(categoryQueryWrapper);
-                    item.setCategory(category.getName());
+//                    item.setCategory(category.getName());
 
                     //数据封装
                     ArticleDto articleDto = new ArticleDto();
                     BeanUtil.copyProperties(item, articleDto);
+                    articleDto.setCategory(category);
                     articleDto.setTags((List<Tag>) tags);
+                    articleDto.setTagsId(tagsId);
                     articleDtoList.add(articleDto);
                 });
         Map<String, Object> dataMap = new HashMap<>();
@@ -155,9 +157,10 @@ public class ArticleController {
      * */
     @GetMapping("admin/articleDelete/{id}")
     public ResultJson<Object> articleDelete(@PathVariable Long id){
-        if(iArticleService.removeById(id)){
-            return ResultJson.ok();
-        }else {
+        try {
+            return iArticleService.articleDelete(id);
+        }catch (Exception e){
+            e.printStackTrace();
             return ResultJson.fail();
         }
     }

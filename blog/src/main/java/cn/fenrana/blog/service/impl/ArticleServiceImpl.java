@@ -15,6 +15,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -60,7 +61,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         ArrayList<Integer> tags = (ArrayList<Integer>) map.get("tag");
         addTags(tags, articleId);
         //保存分类
-        Long categoryId = Long.valueOf(map.get("category").toString()) ;
+        Long categoryId = Long.valueOf(map.get("categoryId").toString());
         addArticleCategory(articleId, categoryId);
         return ResultJson.ok();
     }
@@ -71,9 +72,9 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     @Override
     public ResultJson<Object> updateArticle(Map<String, Object> map) {
         //保存文章
-        Article article = BeanUtil.mapToBean(map, Article.class, false);
-        LocalDateTime localDateTime = LocalDateTime.now();
-        article.setEditTime(localDateTime);
+        Article article = BeanUtil.mapToBean(map, Article.class, true);
+        Instant now = Instant.now();
+        article.setEditTime(now.toEpochMilli());
         articleMapper.updateById(article);
         //修改标签 1.先删除 2然后再插入
         QueryWrapper<ArticleTag> articleTagQueryWrapper = new QueryWrapper<>();
@@ -85,7 +86,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         addTags(tags, articleId);
         //修改分类
         ArticleCategory articleCategory = new ArticleCategory();
-        articleCategory.setCategoryId(Long.valueOf(article.getCategory()));
+        articleCategory.setCategoryId(Long.valueOf(article.getCategoryId()));
         QueryWrapper<ArticleCategory> articleCategoryQueryWrapper = new QueryWrapper<>();
         articleCategoryQueryWrapper.eq("article_id", article.getId());
         articleCategoryMapper.update(articleCategory, articleCategoryQueryWrapper);
@@ -93,12 +94,37 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         return ResultJson.ok();
     }
 
+    /**
+     * 彻底删除文章
+     * @param id 文章id
+     */
+    @Override
+    public ResultJson<Object> articleDelete(Long id) {
+        try {
+            //删除文章
+            articleMapper.deleteById(id);
+            //删除标签
+            QueryWrapper<ArticleTag> articleTagQueryWrapper = new QueryWrapper<>();
+            articleTagQueryWrapper.eq("article_id", id);
+            articleTagMapper.delete(articleTagQueryWrapper);
+            //删除分类
+            QueryWrapper<ArticleCategory> articleCategoryQueryWrapper = new QueryWrapper<>();
+            articleCategoryQueryWrapper.eq("article_id", id);
+            articleCategoryMapper.delete(articleCategoryQueryWrapper);
+            return ResultJson.ok();
+        }catch (Exception e) {
+            e.printStackTrace();
+            return ResultJson.fail();
+        }
+    }
+
 
     /**
      * 把标签插入数据库
-     * @param tags 标签的id的列表
-     * @param  articleId 文章的id
-     * */
+     *
+     * @param tags      标签的id的列表
+     * @param articleId 文章的id
+     */
     private void addTags(List<Integer> tags, Long articleId) {
         tags.forEach(
                 item -> {
@@ -111,8 +137,8 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     /**
      * 保存分类
-     * */
-    private void addArticleCategory(Long articleId, Long categoryId){
+     */
+    private void addArticleCategory(Long articleId, Long categoryId) {
         ArticleCategory articleCategory = new ArticleCategory();
         articleCategory.setArticleId(articleId);
         articleCategory.setCategoryId(categoryId);

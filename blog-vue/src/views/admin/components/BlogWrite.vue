@@ -22,6 +22,7 @@
             type="datetime"
             placeholder="选择日期时间"
             style="width: 420px;"
+            value-format="timestamp"
           >
           </el-date-picker>
         </div>
@@ -51,7 +52,7 @@
         <div class="comment">
           <span>分类：</span>
           <el-select
-            v-model="category"
+            v-model="categoryId"
             placeholder="请选择"
             style="width: 420px;"
           >
@@ -199,12 +200,12 @@ import api from "@/api/urls";
 export default {
   data() {
     return {
-      date: "",
+      date: null,
       id: null,
       isComment: 1,
       isTop: 1,
       categoryOptions: [],
-      category: "",
+      categoryId: "",
       tagOptions: [],
       tag: "",
       summary: "",
@@ -224,8 +225,16 @@ export default {
     const art = this.$route.query.data;
     if (art !== undefined) {
       window.console.log(art);
+      this.id = art.id;
       this.title = art.title;
       this.blog = art.content;
+      this.date = art.createTime;
+      this.isComment = art.disallowComment;
+      this.isTop = art.isTop;
+      this.tag = art.tagsId;
+      this.categoryId = art.categoryId;
+      this.summary = art.summary;
+      this.cover = art.cover;
     }
   },
   methods: {
@@ -287,7 +296,7 @@ export default {
         return;
       }
       //校验分类
-      if (this.category.length <= 0) {
+      if (this.categoryId.length <= 0) {
         this.$notify.error({
           title: "错误",
           message: "请选择分类"
@@ -310,7 +319,7 @@ export default {
         disallowComment: this.isComment,
         isTop: this.isTop,
         tag: this.tag,
-        category: this.category,
+        categoryId: this.categoryId,
         content: this.blog,
         summary: this.summary,
         cover: this.cover

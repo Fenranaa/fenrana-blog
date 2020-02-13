@@ -51,9 +51,9 @@ public class Article implements Serializable {
     private String content;
 
     /**
-     * 分类
+     * 分类实体的ID
      */
-    private String category;
+    private String categoryId;
 
     /**
      * 状态
@@ -64,17 +64,17 @@ public class Article implements Serializable {
     /**
      * 发布时间
      */
-    private LocalDateTime publishTime;
+    private Long publishTime;
 
     /**
      * 上次修改时间
      */
-    private LocalDateTime editTime;
+    private Long editTime;
 
     /**
      * 创建时间
      */
-    private LocalDateTime createTime;
+    private Long createTime;
 
     /**
      * 类型， 0原创 1转载
@@ -96,7 +96,6 @@ public class Article implements Serializable {
      * 0 关闭评论
      * 1 开启评论
      */
-    @TableField("disallowComment")
     private Integer disallowComment;
     /**
      * 是否指定
