@@ -22,7 +22,7 @@ public class SimpleAuthenticationEntryPoint implements AuthenticationEntryPoint 
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) throws IOException, ServletException {
         HashMap<String, String> map = new HashMap<>(3);
         map.put("uri", request.getRequestURI());
-        map.put("msg", "认证失败");
+        map.put("msg", "权限不足, 请从新登陆");
         map.put("status", HttpServletResponse.SC_UNAUTHORIZED + "");
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.setCharacterEncoding("utf-8");

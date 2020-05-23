@@ -12,7 +12,7 @@
     </div>
     <div class="content">
       <el-table :data="tagData" style="width: 100%">
-        <el-table-column prop="id" label="ID" width="200"> </el-table-column>
+        <el-table-column prop="id" label="ID" width="200"></el-table-column>
         <el-table-column prop="name" label="标签的名称" width="200">
         </el-table-column>
         <el-table-column prop="description" label="标签的描述" width="400">
@@ -21,8 +21,8 @@
           <template slot-scope="scope">
             <el-button @click="edit(scope.row)" type="primary">编辑</el-button>
             <el-button type="danger" @click="deletea(scope.row)"
-              >删除</el-button
-            >
+              >删除
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -41,8 +41,8 @@
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
         <el-button type="primary" @click="submitFrom" :loading="isLoading"
-          >确 定</el-button
-        >
+          >确 定
+        </el-button>
       </div>
     </el-dialog>
     <!--    修改弹出窗end-->
@@ -50,6 +50,8 @@
 </template>
 
 <script>
+import { getRequest, postRequest } from "@/utils/request";
+
 export default {
   data() {
     return {
@@ -77,45 +79,33 @@ export default {
     //提交修改的分类
     submitFrom() {
       this.isLoading = true;
-      // this.dialogFormVisible = false;
       var that = this;
-      this.axios
-        .post("http://localhost:8081/admin/addTag", {
-          id: this.form.id,
-          name: this.form.name,
-          description: this.form.description
-        })
-        .then(response => {
-          if (response.data.code === 200) {
-            that.isLoading = false;
-            this.init();
-            that.dialogFormVisible = false;
-            this.$message({
-              type: "success",
-              message: "添加成功!"
-            });
-          } else {
-            this.$message({
-              type: "info",
-              message: "添加失败!"
-            });
-          }
-        })
-        .catch(error => {
-          window.console.log(error);
-        });
+      postRequest("/admin/addTag", {
+        id: this.form.id,
+        name: this.form.name,
+        description: this.form.description
+      }).then(response => {
+        if (response.data.code === 200) {
+          that.isLoading = false;
+          this.init();
+          that.dialogFormVisible = false;
+          this.$message({
+            type: "success",
+            message: "添加成功!"
+          });
+        } else {
+          this.$message({
+            type: "info",
+            message: "添加失败!"
+          });
+        }
+      });
     },
     /*×数据初始化*/
     init() {
-      this.axios
-        .get("http://localhost:8081/admin/tags")
-        .then(response => {
-          window.console.log(response.data);
-          this.tagData = response.data.data;
-        })
-        .catch(error => {
-          window.console.log(error);
-        });
+      getRequest("/admin/tags").then(response => {
+        this.tagData = response.data.data;
+      });
     },
     //删除分类名称
     deletea(row) {
@@ -125,19 +115,14 @@ export default {
         type: "warning"
       })
         .then(() => {
-          this.axios
-            .get("http://localhost:8081/admin/deleteTag/" + row.id)
-            .then(res => {
-              this.$message({
-                type: "info",
-                message: "删除成功"
-              });
-              this.init();
-              window.console.log(res);
-            })
-            .catch(error => {
-              window.console.log(error);
+          getRequest("/admin/deleteTag/" + row.id).then(res => {
+            this.$message({
+              type: "info",
+              message: "删除成功"
             });
+            this.init();
+            window.console.log(res);
+          });
         })
         .catch(() => {
           this.$message({
@@ -155,10 +140,12 @@ export default {
   .search {
     display: flex;
     justify-content: flex-start;
+
     .search-right {
       margin-left: 15px;
     }
   }
+
   .content {
     margin-top: 20px;
   }

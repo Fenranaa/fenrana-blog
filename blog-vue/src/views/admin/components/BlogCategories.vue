@@ -54,6 +54,8 @@
 </template>
 
 <script>
+import { getRequest, postRequest } from "@/utils/request";
+
 export default {
   name: "Categories",
   data() {
@@ -81,45 +83,35 @@ export default {
     //提交修改的分类
     submitFrom() {
       this.isLoading = true;
-      // this.dialogFormVisible = false;
       var that = this;
-      this.axios
-        .post("http://localhost:8081/admin/addCategory", {
-          id: this.form.id,
-          name: this.form.name,
-          description: this.form.description
-        })
-        .then(response => {
-          if (response.data.code === 200) {
-            that.isLoading = false;
-            this.init();
-            that.dialogFormVisible = false;
-            this.$message({
-              type: "success",
-              message: "添加成功!"
-            });
-          } else {
-            this.$message({
-              type: "info",
-              message: "添加失败!"
-            });
-          }
-        })
-        .catch(error => {
-          window.console.log(error);
-        });
+
+      postRequest("/admin/addCategory", {
+        id: this.form.id,
+        name: this.form.name,
+        description: this.form.description
+      }).then(response => {
+        if (response.data.code === 200) {
+          that.isLoading = false;
+          this.init();
+          that.dialogFormVisible = false;
+          this.$message({
+            type: "success",
+            message: "添加成功!"
+          });
+        } else {
+          this.$message({
+            type: "info",
+            message: "添加失败!"
+          });
+        }
+      });
     },
     /*×数据初始化*/
     init() {
-      this.axios
-        .get("http://localhost:8081/admin/categorys")
-        .then(response => {
-          window.console.log(response.data);
-          this.tableData = response.data.data;
-        })
-        .catch(error => {
-          window.console.log(error);
-        });
+      getRequest("/admin/categorys").then(response => {
+        window.console.log(response.data);
+        this.tableData = response.data.data;
+      });
     },
     //删除分类名称
     deletea(row) {
@@ -129,19 +121,14 @@ export default {
         type: "warning"
       })
         .then(() => {
-          this.axios
-            .get("http://localhost:8081/admin/deleteCategory/" + row.id)
-            .then(res => {
-              this.$message({
-                type: "info",
-                message: "删除成功"
-              });
-              this.init();
-              window.console.log(res);
-            })
-            .catch(error => {
-              window.console.log(error);
+          getRequest("admin/deleteCategory/" + row.id).then(res => {
+            this.$message({
+              type: "info",
+              message: "删除成功"
             });
+            this.init();
+            window.console.log(res);
+          });
         })
         .catch(() => {
           this.$message({

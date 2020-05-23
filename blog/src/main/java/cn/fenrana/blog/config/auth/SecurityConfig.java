@@ -44,12 +44,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/login").permitAll()
-                .antMatchers("/admin/**", "/login").hasAnyRole("admin")
+                .antMatchers("/admin/**").hasAnyRole("admin")
 //                .anyRequest().authenticated()
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class)
-                .exceptionHandling().accessDeniedHandler(simpleAccessDeniedHandler).authenticationEntryPoint(simpleAuthenticationEntryPoint);
+                .exceptionHandling().accessDeniedHandler(simpleAccessDeniedHandler).authenticationEntryPoint(simpleAuthenticationEntryPoint)
+                .and().cors();
     }
 
     @Override
@@ -76,4 +77,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
+
 }

@@ -198,6 +198,7 @@
 <script>
 import { mapState, mapActions, mapMutations } from "vuex";
 import api from "@/api/urls";
+import { getRequest, postRequest } from "../../../utils/request";
 export default {
   data() {
     return {
@@ -246,25 +247,15 @@ export default {
     },
     //标签的初始化方法
     initTag() {
-      this.axios
-        .get(api.tags)
-        .then(response => {
-          this.tagOptions = response.data.data;
-        })
-        .catch(error => {
-          window.console.log(error);
-        });
+      getRequest("/admin/tags").then(response => {
+        this.tagOptions = response.data.data;
+      });
     },
     //分类的初始化方法
     initCategory() {
-      this.axios
-        .get(api.categorys)
-        .then(response => {
-          this.categoryOptions = response.data.data;
-        })
-        .catch(error => {
-          window.console.log(error);
-        });
+      getRequest("/admin/categorys").then(response => {
+        this.categoryOptions = response.data.data;
+      });
     },
     //侧边栏打开时的回调
     openDraewr() {
@@ -325,43 +316,30 @@ export default {
         summary: this.summary,
         cover: this.cover
       };
-      this.axios
-        .post(api.addArticle, article)
-        .then(response => {
-          if (response.data.code === 200) {
-            this.$message({
-              type: "success",
-              message: "添加成功!"
-            });
-          } else {
-            this.$message({
-              type: "info",
-              message: "添加失败!"
-            });
-          }
-        })
-        .catch(error => {
-          window.console.log(error);
-        });
+
+      postRequest("/admin/addArticle", article).then(response => {
+        if (response.data.code === 200) {
+          this.$message({
+            type: "success",
+            message: "添加成功!"
+          });
+        } else {
+          this.$message({
+            type: "info",
+            message: "添加失败!"
+          });
+        }
+      });
     },
     // 附件侧边栏的打开回调
     attachmentDrawerOpen() {
-      this.axios
-        .get(api.fileImages, {
-          params: {
-            current: 1,
-            size: 8
-          }
-        })
-        .then(response => {
-          if (response.data.code === 200) {
-            this.attachmentImages = response.data.data.data;
-            this.attachmentImageTotal = response.data.data.total;
-          }
-        })
-        .catch(error => {
-          window.console.log(error);
-        });
+      getRequest("", {
+        current: 1,
+        size: 8
+      }).then(response => {
+        this.attachmentImages = response.data.data.data;
+        this.attachmentImageTotal = response.data.data.total;
+      });
     },
     //附件图片的点击方法
     attachmentImageClick(path) {

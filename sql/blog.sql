@@ -14,7 +14,7 @@ create table article
     type            int     default 0 null comment '类型， 0原创 1转载',
     visits          int               null comment '浏览量',
     summary         varchar(500)      null comment '文章概要',
-    disallowComment tinyint           null comment '是否开启评论 0 false 1 true',
+    disallow_comment tinyint           null comment '是否开启评论 0 false 1 true',
     is_top          tinyint default 0 null comment '是否开启置顶 0 false 1true'
 )
     comment '文章表' charset = utf8;

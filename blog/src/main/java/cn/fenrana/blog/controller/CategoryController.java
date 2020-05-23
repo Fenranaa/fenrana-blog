@@ -18,6 +18,7 @@ import java.util.List;
  * @since 2019-11-05
  */
 @RestController
+@CrossOrigin
 public class CategoryController {
 
     @Autowired
