@@ -7,6 +7,8 @@ import Dashboard from "../views/admin/components/Dashboard";
 import BlogList from "../views/admin/components/BlogList";
 import BlogCategories from "../views/admin/components/BlogCategories";
 import BlogTag from "../views/admin/components/BlogTag.vue";
+import Login from "../views/login";
+import Cookies from "js-cookie";
 
 Vue.use(VueRouter);
 
@@ -15,6 +17,11 @@ const routes = [
     path: "/",
     name: "home",
     component: Home
+  },
+  {
+    path: "/login",
+    name: "login",
+    component: Login
   },
   {
     path: "/about",
@@ -30,30 +37,41 @@ const routes = [
     name: "admin",
     component: AdminIndex,
     redirect: "/admin/dashboard",
-    beforeEnter(to, form, next) {
-      window.console.log("我是dash的路由守护");
-      next();
-    },
     children: [
       {
         path: "/admin/dashboard",
-        component: Dashboard
+        component: Dashboard,
+        meta: {
+          requireAuth: true
+        }
       },
       {
         path: "/admin/blog/list",
-        component: BlogList
+        component: BlogList,
+        meta: {
+          requireAuth: true
+        }
       },
       {
         path: "/admin/blog/write",
-        component: BlogWrite
+        component: BlogWrite,
+        meta: {
+          requireAuth: true
+        }
       },
       {
         path: "/admin/blog/categories",
-        component: BlogCategories
+        component: BlogCategories,
+        meta: {
+          requireAuth: true
+        }
       },
       {
         path: "/admin/blog/tag",
-        component: BlogTag
+        component: BlogTag,
+        meta: {
+          requireAuth: true
+        }
       }
     ]
   }
@@ -61,6 +79,24 @@ const routes = [
 
 const router = new VueRouter({
   routes
+});
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.requireAuth)) {
+    //我需要进行权限验证
+    if (Cookies.get("loginToken")) {
+      //有cookies，放行
+      next();
+    } else {
+      //mei有cookies，跳转到登录界面
+      next({
+        path: "/login",
+        query: { redirect: to.fullPath }
+      });
+    }
+  } else {
+    next();
+  }
 });
 
 export default router;

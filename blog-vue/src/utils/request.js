@@ -1,5 +1,6 @@
 import axios from "axios";
 import { Message } from "element-ui";
+import Cookies from "js-cookie";
 
 // eslint-disable-next-line no-unused-vars
 const instance = axios.create({
@@ -10,9 +11,10 @@ const instance = axios.create({
 //请求拦截
 //所有的网络请求都会走这个方法
 instance.interceptors.request.use(config => {
-  window.console.log("全局请求拦截");
-  config.headers.JWTHeaderName =
-    "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJGZW5yYW5hIiwiY3JlYXRlZCI6MTU5MDIyMzQyODc5MCwiZXhwIjoxNTkwMjI3MDI4fQ.-Wc-JdQek1XzreOyMYJZh_kuLIVRi4c9yvWty8tcPAZgeQPqe6qrt-aPhrEm_xI2aU41SBLera_OlmODSy0Xhg";
+  if (config.url !== "/login") {
+    var loginToken = Cookies.get("loginToken");
+    config.headers.JWTHeaderName = loginToken;
+  }
   return config;
 });
 

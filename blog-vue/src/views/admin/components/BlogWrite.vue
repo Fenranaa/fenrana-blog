@@ -333,12 +333,12 @@ export default {
     },
     // 附件侧边栏的打开回调
     attachmentDrawerOpen() {
-      getRequest("", {
+      getRequest("/admin/file/images", {
         current: 1,
         size: 8
       }).then(response => {
-        this.attachmentImages = response.data.data.data;
-        this.attachmentImageTotal = response.data.data.total;
+        this.attachmentImages = response.data.data;
+        this.attachmentImageTotal = response.data.total;
       });
     },
     //附件图片的点击方法

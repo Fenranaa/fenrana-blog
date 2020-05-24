@@ -119,14 +119,14 @@ create table user
 	
 	
 CREATE TABLE attachment  (
-  id int(11) NOT NULL COMMENT id  primary key,
-  create_time datetime(0) NULL DEFAULT NULL COMMENT '创建时间',
+  id int(11) NOT NULL primary key auto_increment,
+  create_time datetime NULL DEFAULT NULL COMMENT '创建时间',
   media_type varchar(150)  NULL COMMENT '文件格式',
   name varchar(100)  NULL COMMENT '文件名称',
-  path varchar(255) NULL COMMENT '文件存放路径',
+  path varchar(100) NULL COMMENT '文件存放路径',
   size double(200, 0) NULL COMMENT '文件大小',
   thumb_path varchar(255)  NULL COMMENT '缩略图路径',
-  suffix varchar(100)  NULL COMMENT '文件后缀',
+  suffix varchar(20)  NULL COMMENT '文件后缀'
 ) ENGINE = InnoDB charset = utf8;
 
 

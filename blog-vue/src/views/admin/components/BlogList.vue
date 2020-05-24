@@ -181,15 +181,6 @@ export default {
   methods: {
     //分类的初始化方法
     initCategory() {
-      /*      this.axios
-        .get(api.categorys)
-        .then(response => {
-          this.categoryOptions = response.data.data;
-        })
-        .catch(error => {
-          window.console.log(error);
-        });*/
-
       getRequest("/admin/categorys").then(response => {
         this.categoryOptions = response.data.data;
         window.console.log("分类初始化");
@@ -198,23 +189,6 @@ export default {
     },
     //数据的初始化方法
     initData(pageQuery) {
-      /*      this.axios
-        .post(api.articles, pageQuery)
-        .then(response => {
-          if (response.data.code === 200) {
-            this.tableData = response.data.data.data;
-            this.total = response.data.data.total;
-            this.loading = false;
-          } else {
-            this.$message({
-              type: "info",
-              message: "添加失败!"
-            });
-          }
-        })
-        .catch(error => {
-          window.console.log(error);
-        });*/
       postRequest("/admin/articles", pageQuery).then(response => {
         if (response.data.code === 200) {
           this.tableData = response.data.data.data;
