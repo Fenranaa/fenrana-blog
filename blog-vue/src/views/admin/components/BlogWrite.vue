@@ -337,7 +337,8 @@ export default {
         current: 1,
         size: 8
       }).then(response => {
-        this.attachmentImages = response.data.data;
+        window.console.log(response.data);
+        this.attachmentImages = response.data.data.data;
         this.attachmentImageTotal = response.data.total;
       });
     },

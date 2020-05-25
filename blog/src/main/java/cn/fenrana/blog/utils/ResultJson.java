@@ -24,35 +24,47 @@ public class ResultJson<T> implements Serializable {
      * 描述
      */
     private String msg;
-    ResultJson(){
-      this.code =  HttpStatus.OK.value();
-      this.msg = "成功";
+
+    ResultJson() {
+        this.code = HttpStatus.OK.value();
+        this.msg = "成功";
     }
 
-    ResultJson(T data){
-        this.code =  HttpStatus.OK.value();
+    ResultJson(T data) {
+        this.code = HttpStatus.OK.value();
         this.msg = "成功";
         this.data = data;
     }
 
-    ResultJson(int code, String msg){
-        this.code =  code;
+    ResultJson(int code, String msg) {
+        this.code = code;
         this.msg = msg;
     }
-    public static <T> ResultJson<T> ok(){
+
+    ResultJson(int code, T data, String msg) {
+        this.code = code;
+        this.msg = msg;
+        this.data = data;
+    }
+
+    public static <T> ResultJson<T> ok() {
         return new ResultJson<>();
     }
 
-    public static <T> ResultJson<T> ok(T data){
+    public static <T> ResultJson<T> ok(T data) {
         return new ResultJson<>(data);
     }
 
-    public static <T> ResultJson<T> fail(){
+    public static <T> ResultJson<T> fail() {
         return new ResultJson<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), "内部错误");
     }
 
-    public static <T> ResultJson<T> fail(int code, String msg){
+    public static <T> ResultJson<T> fail(int code, String msg) {
         return new ResultJson<>(code, msg);
+    }
+
+    public static <T> ResultJson<T> fail(int code, T data, String msg) {
+        return new ResultJson<>(code,data, msg);
     }
 
 

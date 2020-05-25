@@ -1,7 +1,9 @@
 package cn.fenrana.blog.service;
 
 import cn.fenrana.blog.entity.Attachment;
+import cn.fenrana.blog.entity.AttachmentPageQuery;
 import cn.fenrana.blog.utils.ResultJson;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,4 +28,10 @@ public interface IAttachmentService extends IService<Attachment> {
     ResultJson<String> delete(Long id, String path);
 
     ResultJson<Map<String, Object>> images(Integer current, Integer size);
+
+    ResultJson<List<String>> getAllSuffix();
+
+    ResultJson<IPage<Attachment>> filesByQuery(AttachmentPageQuery attachmentPageQuery);
+
+    ResultJson<List<String>> getFileSaveLocation();
 }

@@ -14,6 +14,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -30,6 +31,7 @@ import java.util.Map;
  * @since 2019-11-05
  */
 @Service
+@Transactional
 public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> implements IArticleService {
 
     @Autowired

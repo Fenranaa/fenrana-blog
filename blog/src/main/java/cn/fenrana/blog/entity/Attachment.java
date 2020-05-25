@@ -45,4 +45,8 @@ public class Attachment {
      * 文件后缀
      * */
     private String suffix;
+    /**
+     * 储存位置
+     * */
+    private String saveLocation;
 }

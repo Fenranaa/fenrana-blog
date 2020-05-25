@@ -8,6 +8,7 @@ import BlogList from "../views/admin/components/BlogList";
 import BlogCategories from "../views/admin/components/BlogCategories";
 import BlogTag from "../views/admin/components/BlogTag.vue";
 import Login from "../views/login";
+import Attachment from "../views/admin/components/Attachment";
 import Cookies from "js-cookie";
 
 Vue.use(VueRouter);
@@ -69,6 +70,13 @@ const routes = [
       {
         path: "/admin/blog/tag",
         component: BlogTag,
+        meta: {
+          requireAuth: true
+        }
+      },
+      {
+        path: "/admin/attachment",
+        component: Attachment,
         meta: {
           requireAuth: true
         }

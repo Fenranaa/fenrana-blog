@@ -1,5 +1,6 @@
 package cn.fenrana.blog.config.auth;
 
+import cn.fenrana.blog.utils.ResultJson;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.AccessDeniedException;
@@ -20,16 +21,11 @@ import java.util.HashMap;
 public class SimpleAccessDeniedHandler implements AccessDeniedHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException e) throws IOException, ServletException {
-        //todo your business
-        HashMap<String, String> map = new HashMap<>(3);
-        map.put("uri", request.getRequestURI());
-        map.put("msg", "认证失败");
-        map.put("status", HttpServletResponse.SC_FORBIDDEN + "");
         response.setStatus(HttpServletResponse.SC_FORBIDDEN);
         response.setCharacterEncoding("utf-8");
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         ObjectMapper objectMapper = new ObjectMapper();
-        String resBody = objectMapper.writeValueAsString(map);
+        String resBody = objectMapper.writeValueAsString(ResultJson.fail(HttpServletResponse.SC_FORBIDDEN, request.getRequestURI(), "认证失败"));
         PrintWriter printWriter = response.getWriter();
         printWriter.print(resBody);
         printWriter.flush();
