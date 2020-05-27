@@ -87,7 +87,7 @@ export default {
             window.console.log(response.data);
             if (response.data.code === 200) {
               Cookies.set("loginToken", response.data.data, {
-                expires: 7,
+                expires: 1,
                 path: ""
               });
               this.$message({

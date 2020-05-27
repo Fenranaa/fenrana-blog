@@ -34,8 +34,8 @@ export const postRequest = (url, data) => {
   return instance.post(url, data);
 };
 
-export const delRequest = url => {
-  return instance.delete(url);
+export const delRequest = (url, data) => {
+  return instance.delete(url, { data: data });
 };
 
 export const putRequest = (url, data) => {

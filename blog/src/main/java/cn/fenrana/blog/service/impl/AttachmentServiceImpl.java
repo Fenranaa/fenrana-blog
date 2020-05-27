@@ -50,25 +50,26 @@ public class AttachmentServiceImpl extends ServiceImpl<AttachmentMapper, Attachm
 
 
         try {
-            String filName = multipartFile.getOriginalFilename();
+            String fileName = multipartFile.getOriginalFilename();
             String contentType = multipartFile.getContentType();
             long size = multipartFile.getSize();
 
-            String[] fileNameSplit = filName.split("\\.");
-            attachment.setName(fileNameSplit[0]);
+            String[] fileNameSplit = fileName.split("\\.");
+            attachment.setName(fileName);
             attachment.setSuffix(fileNameSplit[1]);
             LocalDateTime now = LocalDateTime.now();
             attachment.setCreateTime(now);
             attachment.setMediaType(contentType);
             attachment.setSize(size);
+            attachment.setSaveLocation("本地");
             //给附件名添加随机字符串,避免重名文件
             String a = "-" + RandomUtil.randomString(7) + ".";
-            filName = "upload/" + filName.replace(".", a);
-            attachment.setPath(filName);
-            attachment.setThumbPath(filName);
+            fileName = "upload/" + fileName.replace(".", a);
+            attachment.setPath(fileName);
+            attachment.setThumbPath(fileName);
 
             String path = ResourceUtils.getURL("classpath:").getPath();
-            File file = new File(path + "static/" + filName);
+            File file = new File(path + "static/" + fileName);
 
             multipartFile.transferTo(file);
             int insert = attachmentMapper.insert(attachment);

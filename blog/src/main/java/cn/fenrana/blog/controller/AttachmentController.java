@@ -35,28 +35,6 @@ public class AttachmentController {
     @Autowired
     private IAttachmentService attachmentService;
 
-    /**
-     * 分页返回附件数据信息
-     *
-     * @param current 当前页
-     * @param size    查询的条数
-     * @param suffix  文件后缀
-     */
-    @GetMapping
-    public ResultJson<IPage<Attachment>> files(@RequestParam(defaultValue = "1") Integer current, @RequestParam(defaultValue = "10") Integer size,
-                                               @RequestParam(defaultValue = "") String suffix) {
-        try {
-            Page<Attachment> page = new Page<>();
-            page.setCurrent(current);
-            page.setSize(size);
-
-            IPage<Attachment> attachmentIPage = attachmentService.page(page);
-            return ResultJson.ok(attachmentIPage);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResultJson.fail();
-        }
-    }
 
     /**
      * 根据条件查询全部的附件
@@ -91,10 +69,10 @@ public class AttachmentController {
      * 删除附件
      */
     @DeleteMapping("/{id}")
-    public ResultJson<String> delete(@PathVariable Long id, @RequestParam String path) {
+    public ResultJson<String> delete(@PathVariable Long id, @RequestParam(value = "path", required = false) String path) {
         return attachmentService.delete(id, path);
     }
-
+    
     /**
      * 附件上传
      */
