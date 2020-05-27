@@ -39,18 +39,17 @@ public class TagController {
 
     }
     /**
-     * 获得所有标签
+     * 根据关键词搜索标签
+     * @param searchKey 关键字
      * */
     @GetMapping("admin/tags")
-    public ResultJson<List<Tag>> getTags(){
+    public ResultJson<List<Tag>> getTags(@RequestParam(value = "searchKey", required = false) String searchKey){
         try{
-            List<Tag> tags = iTagService.list();
-            return ResultJson.ok(tags);
+           return iTagService.getTags(searchKey);
         }catch (Exception e){
             e.printStackTrace();
             return ResultJson.fail();
         }
-
     }
     /**
      * 删除标签

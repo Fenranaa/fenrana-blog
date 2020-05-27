@@ -6,11 +6,16 @@
         <el-input v-model="searchKey" style="width: 300px;"></el-input>
       </div>
       <div class="search-right">
-        <el-button type="success">筛选</el-button>
+        <el-button type="success" @click="search">筛选</el-button>
         <el-button type="primary" @click="add()">添加</el-button>
       </div>
     </div>
-    <div class="content">
+    <div
+      class="content"
+      v-loading="loading"
+      element-loading-text="拼命加载中"
+      element-loading-spinner="el-icon-loading"
+    >
       <el-table :data="tagData" style="width: 100%">
         <el-table-column prop="id" label="ID" width="200"></el-table-column>
         <el-table-column prop="name" label="标签的名称" width="200">
@@ -40,7 +45,7 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="submitFrom" :loading="isLoading"
+        <el-button type="primary" @click="submitFrom" :loading="isUpdateLoading"
           >确 定
         </el-button>
       </div>
@@ -51,6 +56,7 @@
 
 <script>
 import { getRequest, postRequest } from "@/utils/request";
+import { httpCodeValidate } from "../../../utils/HttpCodeValidate";
 
 export default {
   data() {
@@ -60,7 +66,8 @@ export default {
       tagData: [],
       form: {},
       dialogFormVisible: false,
-      isLoading: false
+      isUpdateLoading: false,
+      loading: true
     };
   },
   created() {
@@ -78,7 +85,7 @@ export default {
     },
     //提交修改的分类
     submitFrom() {
-      this.isLoading = true;
+      this.isUpdateLoading = true;
       var that = this;
       postRequest("/admin/addTag", {
         id: this.form.id,
@@ -86,7 +93,7 @@ export default {
         description: this.form.description
       }).then(response => {
         if (response.data.code === 200) {
-          that.isLoading = false;
+          that.isUpdateLoading = false;
           this.init();
           that.dialogFormVisible = false;
           this.$message({
@@ -103,8 +110,15 @@ export default {
     },
     /*×数据初始化*/
     init() {
-      getRequest("/admin/tags").then(response => {
-        this.tagData = response.data.data;
+      const param = new URLSearchParams();
+      if (this.searchKey !== "") {
+        param.append("searchKey", this.searchKey);
+      }
+      getRequest("/admin/tags", param).then(response => {
+        httpCodeValidate(response, () => {
+          this.loading = false;
+          this.tagData = response.data.data;
+        });
       });
     },
     //删除分类名称
@@ -130,6 +144,10 @@ export default {
             message: "已取消删除"
           });
         });
+    },
+    //搜索
+    search() {
+      this.init();
     }
   }
 };

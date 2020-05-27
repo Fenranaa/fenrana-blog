@@ -1,7 +1,10 @@
 package cn.fenrana.blog.service;
 
 import cn.fenrana.blog.entity.Tag;
+import cn.fenrana.blog.utils.ResultJson;
 import com.baomidou.mybatisplus.extension.service.IService;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface ITagService extends IService<Tag> {
 
+    ResultJson<List<Tag>> getTags(String searchKey);
 }
