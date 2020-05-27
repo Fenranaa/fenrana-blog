@@ -34,7 +34,11 @@
     </div>
 
     <!-- 修改弹出框 start-->
-    <el-dialog title="标签修改" :visible.sync="dialogFormVisible" width="500px">
+    <el-dialog
+      :title="form.name === undefined ? '添加标签' : '修改标签'"
+      :visible.sync="dialogFormVisible"
+      width="500px"
+    >
       <el-form :model="form" style="width:380px;margin: 0 auto;">
         <el-form-item label="标签名称">
           <el-input v-model="form.name" style="width: 300px"></el-input>
@@ -75,7 +79,6 @@ export default {
   },
   methods: {
     edit(row) {
-      window.console.log(row);
       this.dialogFormVisible = true;
       this.form = row;
     },
@@ -130,12 +133,13 @@ export default {
       })
         .then(() => {
           getRequest("/admin/deleteTag/" + row.id).then(res => {
-            this.$message({
-              type: "info",
-              message: "删除成功"
+            httpCodeValidate(res, () => {
+              this.$message({
+                type: "info",
+                message: "删除成功"
+              });
+              this.init();
             });
-            this.init();
-            window.console.log(res);
           });
         })
         .catch(() => {

@@ -6,11 +6,16 @@
         <el-input v-model="searchKey" style="width: 300px;"></el-input>
       </div>
       <div class="search-right">
-        <el-button type="success">筛选</el-button>
+        <el-button type="success" @click="search">筛选</el-button>
         <el-button type="primary" @click="add()">添加</el-button>
       </div>
     </div>
-    <div class="categories-data">
+    <div
+      class="categories-data"
+      v-loading="loading"
+      element-loading-text="拼命加载中"
+      element-loading-spinner="el-icon-loading"
+    >
       <el-table :data="tableData" style="width: 100%">
         <el-table-column prop="id" label="ID" width="200"> </el-table-column>
         <el-table-column prop="name" label="名称" width="200">
@@ -30,7 +35,7 @@
 
     <!-- 修改弹出框 start-->
     <el-dialog
-      title="内容分类修改"
+      :title="form.name === undefined ? '添加分类' : '修改分类'"
       :visible.sync="dialogFormVisible"
       width="500px"
     >
@@ -55,11 +60,13 @@
 
 <script>
 import { getRequest, postRequest } from "@/utils/request";
+import { httpCodeValidate } from "../../../utils/HttpCodeValidate";
 
 export default {
   name: "Categories",
   data() {
     return {
+      loading: true,
       searchKey: "",
       form: {},
       isLoading: false,
@@ -72,7 +79,6 @@ export default {
   },
   methods: {
     edit(row) {
-      window.console.log(row);
       this.dialogFormVisible = true;
       this.form = row;
     },
@@ -108,9 +114,15 @@ export default {
     },
     /*×数据初始化*/
     init() {
-      getRequest("/admin/categorys").then(response => {
-        window.console.log(response.data);
-        this.tableData = response.data.data;
+      const param = new URLSearchParams();
+      if (this.searchKey !== "") {
+        param.append("searchKey", this.searchKey);
+      }
+      getRequest("/admin/categorys", param).then(response => {
+        httpCodeValidate(response, () => {
+          this.loading = false;
+          this.tableData = response.data.data;
+        });
       });
     },
     //删除分类名称
@@ -122,12 +134,13 @@ export default {
       })
         .then(() => {
           getRequest("admin/deleteCategory/" + row.id).then(res => {
-            this.$message({
-              type: "info",
-              message: "删除成功"
+            httpCodeValidate(res, () => {
+              this.$message({
+                type: "info",
+                message: "删除成功"
+              });
+              this.init();
             });
-            this.init();
-            window.console.log(res);
           });
         })
         .catch(() => {
@@ -136,6 +149,10 @@ export default {
             message: "已取消删除"
           });
         });
+    },
+    //筛选按钮
+    search() {
+      this.init();
     }
   }
 };

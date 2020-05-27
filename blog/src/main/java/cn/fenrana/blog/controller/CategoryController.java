@@ -29,33 +29,36 @@ public class CategoryController {
         boolean b = iCategoryService.saveOrUpdate(category);
         if (b) {
             return ResultJson.ok();
-        }else {
+        } else {
             return ResultJson.fail();
         }
     }
+
     /**
-     * 返回所有分类的集合
-     * */
+     * 根据关键返回所有分类的集合, 关键词为空时，返回全部的集合
+     *
+     * @param searchKey 关键字
+     */
     @GetMapping(value = "/admin/categorys")
-    public ResultJson<List<Category>> categorys(){
+    public ResultJson<List<Category>> categorys(@RequestParam(value = "searchKey", required = false) String searchKey) {
         try {
-            List<Category> list = iCategoryService.list();
-            return ResultJson.ok(list);
-        }catch (Exception e){
+            return iCategoryService.getCategorys(searchKey);
+        } catch (Exception e) {
             e.printStackTrace();
             return ResultJson.fail();
         }
 
     }
+
     /**
      * 删除分类
-     * */
+     */
     @GetMapping("/admin/deleteCategory/{id}")
-    public ResultJson<Category> deleteCategoryById(@PathVariable Long id){
+    public ResultJson<Category> deleteCategoryById(@PathVariable Long id) {
         boolean b = iCategoryService.removeById(id);
-        if (b){
+        if (b) {
             return ResultJson.ok();
-        }else {
+        } else {
             return ResultJson.fail();
         }
 
