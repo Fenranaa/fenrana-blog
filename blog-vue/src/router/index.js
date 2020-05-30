@@ -9,6 +9,12 @@ import BlogCategories from "../views/admin/components/BlogCategories";
 import BlogTag from "../views/admin/components/BlogTag.vue";
 import Login from "../views/login";
 import Attachment from "../views/admin/components/Attachment";
+import Comment from "../views/admin/components/Comment";
+import Log from "../views/admin/components/Log";
+import AdminUser from "../views/admin/components/AdminUser";
+import Seting from "../views/admin/components/Seting";
+import Tools from "../views/admin/components/Tools";
+import About from "../views/admin/components/About";
 import Cookies from "js-cookie";
 
 Vue.use(VueRouter);
@@ -77,6 +83,48 @@ const routes = [
       {
         path: "/admin/attachment",
         component: Attachment,
+        meta: {
+          requireAuth: true
+        }
+      },
+      {
+        path: "/admin/comment",
+        component: Comment,
+        meta: {
+          requireAuth: true
+        }
+      },
+      {
+        path: "/admin/log",
+        component: Log,
+        meta: {
+          requireAuth: true
+        }
+      },
+      {
+        path: "/admin/adminUser",
+        component: AdminUser,
+        meta: {
+          requireAuth: true
+        }
+      },
+      {
+        path: "/admin/seting",
+        component: Seting,
+        meta: {
+          requireAuth: true
+        }
+      },
+      {
+        path: "/admin/tools",
+        component: Tools,
+        meta: {
+          requireAuth: true
+        }
+      },
+      {
+        path: "/admin/about",
+        component: About,
         meta: {
           requireAuth: true
         }

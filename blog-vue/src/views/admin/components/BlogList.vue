@@ -69,7 +69,6 @@
           <el-table-column prop="category.name" label="分类" width="130">
           </el-table-column>
           <el-table-column prop="tag" label="标签">
-            <!--            <el-tag type="success" disable-transitions>vim</el-tag>-->
             <template slot-scope="scope">
               <el-tag
                 type="success"
@@ -303,7 +302,6 @@ export default {
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    align-content: center;
     .search-item {
       margin-left: 40px;
     }

@@ -49,7 +49,10 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="submitFrom" :loading="isUpdateLoading"
+        <el-button
+          type="primary"
+          @click="form.id === undefined ? addTag() : update()"
+          :loading="isUpdateLoading"
           >确 定
         </el-button>
       </div>
@@ -78,19 +81,31 @@ export default {
     this.init();
   },
   methods: {
+    //提交修改的表单
+    update() {
+      window.console.log("修改!");
+      this.submitFrom("/admin/tag/update");
+    },
+    //提交添加的表单
+    addTag() {
+      window.console.log("添加方法!");
+      this.submitFrom("/admin/addTag");
+    },
+    //打开修改的弹出窗
     edit(row) {
       this.dialogFormVisible = true;
       this.form = row;
     },
+    //打开添加的弹出框
     add() {
       this.form = {};
       this.dialogFormVisible = true;
     },
-    //提交修改的分类
-    submitFrom() {
+    //提交表单
+    submitFrom(url) {
       this.isUpdateLoading = true;
       var that = this;
-      postRequest("/admin/addTag", {
+      postRequest(url, {
         id: this.form.id,
         name: this.form.name,
         description: this.form.description
