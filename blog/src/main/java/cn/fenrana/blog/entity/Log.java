@@ -70,7 +70,25 @@ public class Log implements Serializable {
     /**
      * 操作时间
      */
-    private LocalDateTime createTime;
+    private Long createTime;
+
+    /**
+     * 请求url
+     */
+    private String url;
+
+    /**
+     * 请求来自那个设备， 比如pc， android，平板
+     */
+    private String device;
+    /**
+     * 浏览器名称
+     */
+    private String browserName;
+    /**
+     * 浏览器版本
+     */
+    private String browserVersion;
 
 
 }

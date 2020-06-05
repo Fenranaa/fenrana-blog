@@ -83,12 +83,10 @@ export default {
   methods: {
     //提交修改的表单
     update() {
-      window.console.log("修改!");
       this.submitFrom("/admin/tag/update");
     },
     //提交添加的表单
     addTag() {
-      window.console.log("添加方法!");
       this.submitFrom("/admin/addTag");
     },
     //打开修改的弹出窗

@@ -41,8 +41,6 @@ public class ArticleController {
     @Autowired
     IArticleTagService iArticleTagService;
 
-//    @Autowired
-//    IArticleCategoryService iArticleCategoryService;
 
     @Autowired
     ICategoryService iCategoryService;

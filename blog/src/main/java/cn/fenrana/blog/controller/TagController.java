@@ -45,10 +45,10 @@ public class TagController {
      * 添加标签
      */
     @PostMapping("/admin/addTag")
-    public ResultJson<Tag> addTag(@RequestBody Tag tag, HttpServletRequest request) throws JsonProcessingException {
+    public ResultJson<Tag> addTag(@RequestBody Tag tag) throws JsonProcessingException {
         boolean b = iTagService.save(tag);
         //记录日志
-        applicationEventPublisher.publishEvent(new LogEvent(this, request, "添加标签:" + tag.getName(), LogType.TAG_INSERT.value(), objectMapper.writeValueAsString(tag)));
+        applicationEventPublisher.publishEvent(new LogEvent(this, "添加标签:" + tag.getName(), LogType.TAG_INSERT.value(), objectMapper.writeValueAsString(tag)));
         if (b) {
             return ResultJson.ok();
         } else {
@@ -61,9 +61,11 @@ public class TagController {
      * 修改标签
      */
     @PostMapping("/admin/tag/update")
-    public ResultJson<Object> updateTag(@RequestBody Tag tag, HttpServletRequest request) throws JsonProcessingException {
+    public ResultJson<Object> updateTag(@RequestBody Tag tag) throws JsonProcessingException {
         boolean b = iTagService.updateById(tag);
-        applicationEventPublisher.publishEvent(new LogEvent(this, request, "修改标签为:" + tag.getName(), LogType.TAG_UPDATE.value(), objectMapper.writeValueAsString(tag)));
+        //记录日志
+        applicationEventPublisher.publishEvent(new LogEvent(this, "修改标签为:" + tag.getName(),
+                LogType.TAG_UPDATE.value(), objectMapper.writeValueAsString(tag)));
 
         if (b) {
             return ResultJson.ok();
@@ -91,8 +93,10 @@ public class TagController {
      * 删除标签
      */
     @GetMapping("/admin/deleteTag/{id}")
-    public ResultJson<Category> deleteCategoryById(@PathVariable Long id) {
+    public ResultJson<Category> deleteCategoryById(@PathVariable Long id) throws JsonProcessingException {
         boolean b = iTagService.removeById(id);
+        applicationEventPublisher.publishEvent(new LogEvent(this, "删除的标签的id:" + id,
+                LogType.TAG_DELETE.value(), objectMapper.writeValueAsString(id)));
         if (b) {
             return ResultJson.ok();
         } else {

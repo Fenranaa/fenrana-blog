@@ -2,6 +2,8 @@ package cn.fenrana.blog.service.impl;
 
 import cn.fenrana.blog.entity.Attachment;
 import cn.fenrana.blog.entity.AttachmentPageQuery;
+import cn.fenrana.blog.entity.enums.LogType;
+import cn.fenrana.blog.event.LogEvent;
 import cn.fenrana.blog.mapper.AttachmentMapper;
 import cn.fenrana.blog.service.IAttachmentService;
 import cn.fenrana.blog.utils.ResultJson;
@@ -11,8 +13,10 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.interceptor.TransactionAspectSupport;
@@ -33,6 +37,11 @@ public class AttachmentServiceImpl extends ServiceImpl<AttachmentMapper, Attachm
 
     @Autowired
     private AttachmentMapper attachmentMapper;
+
+    ObjectMapper objectMapper = new ObjectMapper();
+
+    @Autowired
+    private ApplicationEventPublisher applicationEventPublisher;
 
     @Value("${server.name}")
     private String name;
@@ -74,6 +83,7 @@ public class AttachmentServiceImpl extends ServiceImpl<AttachmentMapper, Attachm
             multipartFile.transferTo(file);
             int insert = attachmentMapper.insert(attachment);
             attachment.setPath("http://" + name + ":" + port + "/" + attachment.getPath());
+            applicationEventPublisher.publishEvent(new LogEvent(this, "上传附件: " + fileName, LogType.ATTACHMENT_UPLOAD.value()));
             return attachment;
         } catch (Exception e) {
             e.printStackTrace();
@@ -118,7 +128,14 @@ public class AttachmentServiceImpl extends ServiceImpl<AttachmentMapper, Attachm
             if (!isDelete) {
                 //如果文件删除失败回滚事务
                 TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            } else {
+                Map<String, Object> map = new HashMap<>(2);
+                map.put("id", id);
+                map.put("path", path);
+                //日志记录
+                applicationEventPublisher.publishEvent(new LogEvent(this, "删除附件: " + path, LogType.ATTACHMENT_UPLOAD.value(), objectMapper.writeValueAsString(map)));
             }
+
             return ResultJson.ok("文件删除成功!");
         } catch (Exception e) {
             e.printStackTrace();

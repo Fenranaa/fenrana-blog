@@ -14,15 +14,12 @@ import org.springframework.stereotype.Component;
 public class LogEventListener {
 
     @Autowired
-    private  LogMapper logMapper;
+    private LogMapper logMapper;
 
 
     @Async
     @EventListener
     public void onApplicationEvent(LogEvent logEvent) {
-        //
-        System.out.println("测试监听");
-        System.out.println(logEvent.getLog());
         Log log = logEvent.getLog();
         logMapper.insert(log);
     }

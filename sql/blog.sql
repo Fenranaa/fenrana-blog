@@ -8,9 +8,9 @@ create table article
     content         mediumtext        null comment '内容',
     category_id     varchar(20)       null comment '分类',
     state           varchar(100)      not null comment '状态',
-    publish_time    long          null comment '发布时间',
-    edit_time       long          null comment '上次修改时间',
-    create_time     long          null comment '创建时间',
+    publish_time    bigint          null comment '发布时间',
+    edit_time       bigint          null comment '上次修改时间',
+    create_time     bigint          null comment '创建时间',
     type            int     default 0 null comment '类型， 0原创 1转载',
     visits          int               null comment '浏览量',
     summary         varchar(500)      null comment '文章概要',
@@ -67,20 +67,21 @@ create table comment
 )
     comment '评论表' charset = utf8;
 
-create table log
-(
-    id          bigint auto_increment comment '编号'
-        primary key,
-    username    varchar(20)  null comment '操作用户',
-    operation   varchar(20)  null comment '操作描述',
-    time        bigint       null comment '耗时(毫秒)',
-    method      varchar(100) null comment '操作方法',
-    params      varchar(255) null comment '操作参数',
-    ip          varchar(20)  null comment 'IP地址',
-    create_time datetime     null comment '操作时间',
-    location    varchar(20)  null comment '操作地点'
-)
-    comment '系统日志表' charset = utf8;
+  
+  CREATE TABLE log (
+  id bigint NOT NULL AUTO_INCREMENT COMMENT '编号',
+  username varchar(20) DEFAULT NULL COMMENT '操作用户',
+  operation varchar(160) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '操作描述',
+  method varchar(100) DEFAULT NULL COMMENT '操作方法',
+  params varchar(255) DEFAULT NULL COMMENT '操作参数',
+  ip varchar(20) DEFAULT NULL COMMENT 'IP地址',
+  create_time datetime DEFAULT NULL COMMENT '操作时间',
+  device varchar(20) DEFAULT NULL COMMENT '来自那个设备， 比如pc， android，平板',
+  browser_name varchar(20) DEFAULT NULL COMMENT '浏览器名称',
+  browser_cersion varchar(10) DEFAULT NULL COMMENT '浏览器版本',
+  url varchar(200) DEFAULT NULL COMMENT '请求的url',
+  PRIMARY KEY (id)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='系统日志表';
 
 create table login_log
 (
