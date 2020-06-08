@@ -1,4 +1,4 @@
-package cn.fenrana.blog.entity;
+package cn.fenrana.blog.entity.param;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -7,9 +7,19 @@ import lombok.experimental.Accessors;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class AttachmentPageQuery {
-    //关键字检索
+public class PageParam {
+    /**
+     * 搜索关键字
+     * */
     private String searchKey;
+    /**
+     * 文章状态
+     * */
+    private String state;
+    /**
+     * 文章分类
+     * */
+    private Long categoryId;
 
     /**
      * 当前页
@@ -20,18 +30,6 @@ public class AttachmentPageQuery {
      * 每页显示的条数
      * */
     private Integer size;
-    /**
-     * 文件类型
-     * */
-    private String mediaType;
-    /**
-     * 后缀
-     * */
-    private String suffix;
 
-    /**
-     * 文件储存位置
-     * */
-    private String saveLocation;
 
 }

@@ -430,7 +430,6 @@ export default {
       .top {
         cursor: pointer;
         height: 85%;
-        /*backgroundimage: url("../../../assets/images/zbyl.png");*/
         background-repeat: round;
         .info {
           background-color: rgba(51, 51, 51, 0.5);

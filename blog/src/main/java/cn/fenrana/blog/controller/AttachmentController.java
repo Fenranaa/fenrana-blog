@@ -1,23 +1,16 @@
 package cn.fenrana.blog.controller;
 
 
-import cn.fenrana.blog.entity.Article;
 import cn.fenrana.blog.entity.Attachment;
-import cn.fenrana.blog.entity.AttachmentPageQuery;
+import cn.fenrana.blog.entity.param.AttachmentPageParam;
 import cn.fenrana.blog.service.IAttachmentService;
 import cn.fenrana.blog.utils.ResultJson;
-import cn.hutool.core.util.StrUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -44,9 +37,9 @@ public class AttachmentController {
      * 根据条件查询全部的附件
      */
     @PostMapping("/filesByQuery")
-    public ResultJson<IPage<Attachment>> filesByQuery(@RequestBody AttachmentPageQuery attachmentPageQuery) {
+    public ResultJson<IPage<Attachment>> filesByQuery(@RequestBody AttachmentPageParam attachmentPageParam) {
         try {
-            return attachmentService.filesByQuery(attachmentPageQuery);
+            return attachmentService.filesByQuery(attachmentPageParam);
         }catch (Exception e) {
             e.printStackTrace();
             return ResultJson.ok();

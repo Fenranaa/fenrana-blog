@@ -3,21 +3,19 @@ package cn.fenrana.blog.controller;
 
 import cn.fenrana.blog.entity.*;
 import cn.fenrana.blog.entity.dto.ArticleDto;
+import cn.fenrana.blog.entity.param.PageParam;
 import cn.fenrana.blog.utils.ResultJson;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-import com.baomidou.mybatisplus.core.conditions.query.Query;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.baomidou.mybatisplus.extension.api.R;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import cn.fenrana.blog.service.IArticleService;
 import cn.fenrana.blog.service.IArticleTagService;
-import cn.fenrana.blog.service.IArticleCategoryService;
 import cn.fenrana.blog.service.ITagService;
 import cn.fenrana.blog.service.ICategoryService;
 
@@ -71,24 +69,24 @@ public class ArticleController {
      * 查询文章
      * */
     @PostMapping("admin/articles")
-    public ResultJson<Map<String, Object>> articleList(@RequestBody PageQuery pageQuery) {
+    public ResultJson<Map<String, Object>> articleList(@RequestBody PageParam pageParam) {
         Page<Article> page = new Page<>();
-        page.setCurrent(pageQuery.getCurrent());
-        page.setSize(pageQuery.getSize());
+        page.setCurrent(pageParam.getCurrent());
+        page.setSize(pageParam.getSize());
         QueryWrapper<Article> queryWrapper = new QueryWrapper<>();
         //要查询的列
         queryWrapper.select("id", "title", "cover","content", "category_id", "state", "publish_time", "create_time", "type", "visits", "summary", "disallow_comment", "is_top");
         //根据标题模糊查询调价
-        if (StrUtil.isNotBlank(pageQuery.getSearchKey())) {
-            queryWrapper.like("title", pageQuery.getSearchKey());
+        if (StrUtil.isNotBlank(pageParam.getSearchKey())) {
+            queryWrapper.like("title", pageParam.getSearchKey());
         }
         Map<String, String> map = new HashMap<>();
-        if (pageQuery.getCategoryId() != null) {
-            map.put("category_id", pageQuery.getCategoryId().toString());
+        if (pageParam.getCategoryId() != null) {
+            map.put("category_id", pageParam.getCategoryId().toString());
 
         }
-        if (StrUtil.isNotBlank(pageQuery.getState())) {
-            map.put("state", pageQuery.getState());
+        if (StrUtil.isNotBlank(pageParam.getState())) {
+            map.put("state", pageParam.getState());
         }
         queryWrapper.allEq(map, false);
         IPage<Article> articles = iArticleService.page(page, queryWrapper);

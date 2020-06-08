@@ -2,6 +2,7 @@ package cn.fenrana.blog.mapper;
 
 import cn.fenrana.blog.entity.Log;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Update;
 
 /**
  * <p>
@@ -13,4 +14,9 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface LogMapper extends BaseMapper<Log> {
 
+    /**
+     * qing
+     * */
+    @Update("truncate table log")
+    void deleteAll();
 }

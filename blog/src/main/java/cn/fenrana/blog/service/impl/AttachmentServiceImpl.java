@@ -1,7 +1,7 @@
 package cn.fenrana.blog.service.impl;
 
 import cn.fenrana.blog.entity.Attachment;
-import cn.fenrana.blog.entity.AttachmentPageQuery;
+import cn.fenrana.blog.entity.param.AttachmentPageParam;
 import cn.fenrana.blog.entity.enums.LogType;
 import cn.fenrana.blog.event.LogEvent;
 import cn.fenrana.blog.mapper.AttachmentMapper;
@@ -178,27 +178,27 @@ public class AttachmentServiceImpl extends ServiceImpl<AttachmentMapper, Attachm
     }
 
     @Override
-    public ResultJson<IPage<Attachment>> filesByQuery(AttachmentPageQuery attachmentPageQuery) {
+    public ResultJson<IPage<Attachment>> filesByQuery(AttachmentPageParam attachmentPageParam) {
         QueryWrapper<Attachment> queryWrapper = new QueryWrapper<>();
 
-        if (StrUtil.isNotBlank(attachmentPageQuery.getSearchKey())) {
-            queryWrapper.like("name", attachmentPageQuery.getSearchKey());
+        if (StrUtil.isNotBlank(attachmentPageParam.getSearchKey())) {
+            queryWrapper.like("name", attachmentPageParam.getSearchKey());
         }
         Map<String, String> map = new HashMap<>();
-        if (StrUtil.isNotBlank(attachmentPageQuery.getMediaType())) {
-            map.put("media_type", attachmentPageQuery.getMediaType());
+        if (StrUtil.isNotBlank(attachmentPageParam.getMediaType())) {
+            map.put("media_type", attachmentPageParam.getMediaType());
         }
 
-        if (StrUtil.isNotBlank(attachmentPageQuery.getSuffix())) {
-            map.put("suffix", attachmentPageQuery.getSuffix());
+        if (StrUtil.isNotBlank(attachmentPageParam.getSuffix())) {
+            map.put("suffix", attachmentPageParam.getSuffix());
         }
-        if (StrUtil.isNotBlank(attachmentPageQuery.getSaveLocation())) {
-            map.put("save_location", attachmentPageQuery.getSaveLocation());
+        if (StrUtil.isNotBlank(attachmentPageParam.getSaveLocation())) {
+            map.put("save_location", attachmentPageParam.getSaveLocation());
         }
         queryWrapper.allEq(map);
         Page<Attachment> page = new Page<>();
-        page.setSize(attachmentPageQuery.getSize());
-        page.setCurrent(attachmentPageQuery.getCurrent());
+        page.setSize(attachmentPageParam.getSize());
+        page.setCurrent(attachmentPageParam.getCurrent());
         IPage<Attachment> attachmentIPage = attachmentMapper.selectPage(page, queryWrapper);
 
         return ResultJson.ok(attachmentIPage);
