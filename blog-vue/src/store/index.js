@@ -7,9 +7,20 @@ export default new Vuex.Store({
   state: {
     title: "",
     cont: 1000,
-    blog: "开始编辑吧"
+    blog: "开始编辑吧",
+    // 侧边栏的控制属性, 默认为打开
+    asideBar: {
+      opened: true
+    },
+    breadcrumb: []
   },
   mutations: {
+    setBreadcrumb(state, value) {
+      state.breadcrumb = value;
+    },
+    toggleAsideBar(state) {
+      state.asideBar.opened = !state.asideBar.opened;
+    },
     setTitle(state, value) {
       state.title = value;
     },
@@ -24,10 +35,17 @@ export default new Vuex.Store({
     //对state中的数据进行加工处理
     money: state => {
       return state.cont + "元";
+    },
+    //返回asideBar
+    getAsideBar: state => {
+      return state.asideBar;
+    },
+    getBreadcrumb: state => {
+      return state.breadcrumb;
     }
   },
+  //异步操作时使用
   actions: {
-    //异步操作时使用
     setTitleAsyns({ commit }, value) {
       commit("setTitle", value);
     },
