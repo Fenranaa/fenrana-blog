@@ -14,19 +14,19 @@
       </el-breadcrumb>
     </div>
     <div class="right">
-      <div>
+      <div class="right-item">
         <el-badge is-dot class="item">
           <span class="iconfont icon-lingdang" style="font-size: 24px;"></span>
         </el-badge>
       </div>
-      <div>
+      <div class="right-item">
         <span class="iconfont icon-shezhi" style="font-size: 24px;"></span>
       </div>
-      <div>
+      <div class="right-item">
         <el-dropdown @command="handleCommand">
           <span
             class="el-dropdown-link"
-            style="display: flex;justify-content: center;align-items: center; cursor: pointer"
+            style="display: flex;justify-content: center;align-items: center;"
           >
             <el-avatar
               size="small"
@@ -109,8 +109,19 @@ export default {
     width: 10%;
     display: flex;
     justify-content: space-around;
-    align-items: center;
-    background: #409eff;
+    height: 100%;
+    .right-item {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      cursor: pointer;
+      transition: background 0.3s;
+      -webkit-tap-highlight-color: transparent;
+      &:hover {
+        background: rgba(0, 0, 0, 0.025);
+      }
+    }
   }
 }
 </style>

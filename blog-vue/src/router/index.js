@@ -1,6 +1,6 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import Home from "../views/Home.vue";
+// import Home from "../views/Home.vue";
 import AdminIndex from "../views/admin/AdminIndex";
 import BlogWrite from "../views/admin/components/BlogWrite";
 import Dashboard from "../views/admin/components/Dashboard";
@@ -15,6 +15,7 @@ import AdminUser from "../views/admin/components/AdminUser";
 import Seting from "../views/admin/components/Seting";
 import Tools from "../views/admin/components/Tools";
 import About from "../views/admin/components/About";
+import Index from "../views/Index";
 import Cookies from "js-cookie";
 
 Vue.use(VueRouter);
@@ -22,8 +23,8 @@ Vue.use(VueRouter);
 const routes = [
   {
     path: "/",
-    name: "home",
-    component: Home
+    name: "index",
+    component: Index
   },
   {
     path: "/login",
@@ -33,11 +34,7 @@ const routes = [
   {
     path: "/about",
     name: "about",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/About.vue")
+    component: () => import("../views/About.vue")
   },
   {
     path: "/admin",

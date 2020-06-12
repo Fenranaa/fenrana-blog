@@ -1,4 +1,4 @@
-package cn.fenrana.blog.controller;
+package cn.fenrana.blog.controller.admin;
 
 
 import cn.fenrana.blog.entity.Log;
