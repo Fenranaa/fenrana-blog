@@ -262,7 +262,7 @@ export default {
 };
 </script>
 
-<style scoped lang="less">
+<style scoped lang="scss">
 .log {
   .search {
     padding: 10px;

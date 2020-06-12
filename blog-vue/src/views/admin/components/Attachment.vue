@@ -393,7 +393,7 @@ export default {
 };
 </script>
 
-<style scoped lang="less">
+<style scoped lang="scss">
 .attachment {
   .search {
     height: 100%;
