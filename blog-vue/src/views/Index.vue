@@ -1,15 +1,23 @@
 <template>
-  <div>
-    <h1>
-      博客首页
-    </h1>
+  <div class="main-wrapper">
+    <Header />
+    <div>22</div>
+    <div>333</div>
   </div>
 </template>
 
 <script>
+import Header from "../components/Header";
+
 export default {
-  name: "Index"
+  name: "Index",
+  components: {
+    Header
+  }
 };
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.main-wrapper {
+}
+</style>
