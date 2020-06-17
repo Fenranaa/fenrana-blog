@@ -16,6 +16,7 @@ import Seting from "../views/admin/components/Seting";
 import Tools from "../views/admin/components/Tools";
 import About from "../views/admin/components/About";
 import Index from "../views/Index";
+import Main from "../components/Main";
 import Cookies from "js-cookie";
 
 Vue.use(VueRouter);
@@ -24,7 +25,15 @@ const routes = [
   {
     path: "/",
     name: "index",
-    component: Index
+    component: Index,
+    redirect: "/main",
+    children: [
+      {
+        path: "/main",
+        name: "main",
+        component: Main
+      }
+    ]
   },
   {
     path: "/login",

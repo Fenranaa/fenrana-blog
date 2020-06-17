@@ -1,2 +1,24 @@
 $headerHeight: 60px;
 $headerBackgroundColor: #fff;
+
+$mainBackgroundColor: #fff;
+@mixin tag {
+  margin-top: 10px;
+  border-radius: 5px;
+  background-color: #fff;
+  padding-top: 5px;
+  padding-bottom: 10px;
+  &:hover {
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.1), 0 4px 8px 0 rgba(0, 0, 0, 0.1),
+      0 8px 16px 0 rgba(0, 0, 0, 0.1), 0 16px 32px 0 rgba(0, 0, 0, 0.1);
+  }
+}
+@mixin tag-title {
+  margin-left: 10px;
+  padding-bottom: 5px;
+  color: #287aed;
+  font-weight: bold;
+  span {
+    margin-left: 5px;
+  }
+}

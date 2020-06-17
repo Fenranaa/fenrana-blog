@@ -12,6 +12,7 @@ body,
   margin: 0;
   padding: 0;
   background-color: #ebebeb;
+  font-size: 16px;
 
   .el-drawer__body {
     overflow-y: auto !important;
