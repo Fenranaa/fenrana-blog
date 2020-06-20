@@ -11,7 +11,11 @@ const instance = axios.create({
 //请求拦截
 //所有的网络请求都会走这个方法
 instance.interceptors.request.use(config => {
-  if (config.url !== "/login") {
+  if (
+    config.url !== "/login" &&
+    config.url !== "/common/asideInfo" &&
+    config.url !== "/common/articles"
+  ) {
     var loginToken = Cookies.get("loginToken");
     config.headers.JWTHeaderName = loginToken;
   }

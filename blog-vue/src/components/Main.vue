@@ -2,25 +2,20 @@
   <div class="main">
     <el-row :gutter="20" type="flex" justify="center">
       <el-col :xs="22" :sm="20" :md="13" :lg="12">
-        <div class="cart" v-for="(index, item) in info" :key="index">
+        <div class="cart" v-for="item in articles" :key="item.id">
           <div class="cart-left">
             <el-image
               style="width: 100%; height: 100%"
-              src="https://fenrana.oss-cn-beijing.aliyuncs.com/img/U76a18e0d315e407a8daf3d91de033e31i.jpg"
+              :src="item.cover"
               fit="cover"
             ></el-image>
           </div>
           <div class="cart-right">
             <div class="title">
-              Spring Security 实战干货：如何实现不同的接口不同的安全策略{{
-                item
-              }}
+              {{ item.title }}
             </div>
             <div class="center">
-              欢迎阅读 Spring Security 实战干货 系列文章
-              。最近有开发小伙伴提了一个有趣的问题。他正在做一个项目，涉及两种风格，一种是给小程序出接口，安全上使用无状态的JWT
-              Token；另一种是管理后台使用的是Freemarker，也就是前后端不分离的Session机制。用Spring
-              Security该怎么办？
+              {{ item.summary }}
             </div>
             <div class="tag">
               <el-tag size="small" type="info">java</el-tag>
@@ -30,11 +25,11 @@
               <div class="foot-left">
                 <div>
                   <i class="iconfont el-icon-user"></i>
-                  <span>Fenrana</span>
+                  <span>{{ item.author }}</span>
                 </div>
                 <div>
                   <i class="iconfont el-icon-chat-dot-round"></i>
-                  <span>3</span>
+                  <span>{{ item.visits }}</span>
                 </div>
               </div>
               <div class="foot-right">
@@ -58,15 +53,28 @@
 
 <script>
 import Sidebar from "./Sidebar";
+import { getRequest } from "../utils/request";
+import { httpCodeValidate } from "../utils/HttpCodeValidate";
 export default {
   name: "Main",
+  created() {
+    getRequest("/common/articles", { current: this.current }).then(res => {
+      httpCodeValidate(res, () => {
+        window.console.log(res);
+        this.total = res.data.data.total;
+        this.articles = res.data.data.articles;
+      });
+    });
+  },
   components: {
     Sidebar
   },
   data() {
     return {
-      info: ["", "", "", "", "", "", "", "", ""],
-      searchKey: ""
+      articles: [],
+      searchKey: "",
+      current: 1,
+      total: 0
     };
   }
 };

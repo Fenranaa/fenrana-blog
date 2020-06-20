@@ -8,6 +8,7 @@
       >
       </el-input>
     </div>
+    <!-- info start-->
     <div class="info">
       <div class="info-avatar">
         <img
@@ -49,55 +50,78 @@
         </div>
       </div>
     </div>
+    <!--info end-->
+    <!--  分类 start-->
     <div class="category">
       <div class="category-title">
         <i class="iconfont icon-folder-copy"></i>
         <span>分类</span>
       </div>
       <div class="category-content">
-        <div class="category-content-item">
-          <span>java</span>
-          <span>(2)</span>
-        </div>
-        <div class="category-content-item">
-          <span>java</span>
-          <span>(2)</span>
-        </div>
-        <div class="category-content-item">
-          <span>java</span>
-          <span>(2)</span>
-        </div>
-        <div class="category-content-item">
-          <span>java</span>
-          <span>(2)</span>
+        <div
+          class="category-content-item"
+          v-for="item in categoryCount"
+          :key="item.categoryId"
+        >
+          <span>{{ item.name }}</span>
+          <span>({{ item.count }})</span>
         </div>
       </div>
     </div>
+    <!--    分类 end-->
+    <!-- 标签start-->
     <div class="tag">
       <div class="tag-title">
         <i class="iconfont icon-biaoqian1"></i>
         <span>标签</span>
       </div>
       <div class="tag-content">
-        <el-tag type="info">Docker</el-tag>
-        <el-tag type="info">spring boot</el-tag>
-        <el-tag type="info">java</el-tag>
-        <el-tag type="info">Linux</el-tag>
-        <el-tag type="info">二叉树</el-tag>
-        <el-tag type="info">设计模式</el-tag>
-        <el-tag type="info">标签三</el-tag>
-        <el-tag type="info">标签三</el-tag>
+        <el-tag type="info" v-for="item in tagCount" :key="item.tagId">{{
+          item.name
+        }}</el-tag>
       </div>
     </div>
+    <!-- 标签end-->
+    <!--归档 start-->
+    <div class="archive">
+      <div class="archive-title">
+        <i class="iconfont icon-folder-copy"></i>
+        <span>归档</span>
+      </div>
+      <div
+        class="archive-item"
+        v-for="(item, index) in archiveCount"
+        :key="index"
+      >
+        <span>{{ item.year }}年{{ item.month }}月</span>
+        <span>({{ item.count }})</span>
+      </div>
+    </div>
+    <!-- 归档 end-->
   </div>
 </template>
 
 <script>
+import { getRequest } from "../utils/request";
+import { httpCodeValidate } from "../utils/HttpCodeValidate";
+
 export default {
   name: "Sidebar",
+  created() {
+    getRequest("/common/asideInfo").then(res => {
+      httpCodeValidate(res, () => {
+        this.archiveCount = res.data.data.archiveCount;
+        this.categoryCount = res.data.data.categoryCount;
+        this.tagCount = res.data.data.tagCount;
+      });
+    });
+  },
   data() {
     return {
-      searchKey: ""
+      searchKey: "",
+      tagCount: [],
+      categoryCount: [],
+      archiveCount: []
     };
   }
 };
@@ -105,14 +129,18 @@ export default {
 
 <style scoped lang="scss">
 @import "../assets/styles/common.scss";
+
 .sidebar {
   margin-top: 10px;
+
   .search {
     background-color: #fff;
     border-radius: 5px;
   }
+
   .info {
     @include tag;
+
     .info-avatar {
       width: 80px;
       height: 80px;
@@ -120,16 +148,19 @@ export default {
       border-radius: 50%;
       overflow: hidden;
       border: #409eff 1px solid;
+
       img {
         height: 100%;
         width: 100%;
       }
     }
+
     .info-name {
       text-align: center;
       color: #1e90ff;
       font-size: 16px;
     }
+
     .info-gushi {
       margin-top: 5px;
       font-size: 12px;
@@ -137,20 +168,24 @@ export default {
       display: flex;
       flex-direction: column;
     }
+
     .info-divider {
       margin: 10px auto;
       border-top: 1px solid #333333;
       width: 95%;
     }
+
     .info-links {
       /*margin-top: 10px;*/
       display: flex;
       flex-wrap: wrap;
       justify-content: space-around;
       align-items: center;
+
       & > div:nth-child(n + 3) {
         margin-top: 8px;
       }
+
       .info-links-item {
         background-color: #eee;
         height: 30px;
@@ -159,59 +194,64 @@ export default {
         width: 43%;
         border-radius: 5px;
         padding-left: 5px;
+
         &:hover {
           border-radius: 4px;
           background: #409eff;
         }
+
         span {
           margin-left: 5px;
         }
       }
     }
   }
+
   .category {
     @include tag;
+
     .category-title {
       @include tag-title;
     }
+
     .category-content {
       .category-content-item {
-        height: 36px;
-        line-height: 36px;
-        font-size: 14px;
-        font-weight: bold;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        color: rgba(51, 51, 51, 0.8);
-        padding-left: 15px;
-        padding-right: 15px;
-        display: flex;
-        justify-content: space-between;
-        cursor: pointer;
-        &:hover {
-          border-left: 4px solid #287aed;
-          background: rgba(40, 122, 237, 0.1);
-        }
+        @include tag-item;
       }
     }
   }
+
   .tag {
     @include tag;
+
     .tag-title {
       @include tag-title;
     }
+
     .tag-content {
       /*padding-bottom: 10px;*/
       span {
         margin-left: 5px;
         margin-top: 5px;
         cursor: pointer;
+
         &:hover {
           background-color: #607f9a;
           color: #333333;
         }
       }
+    }
+  }
+
+  .archive {
+    @include tag;
+
+    .archive-title {
+      @include tag-title;
+    }
+
+    .archive-item {
+      @include tag-item;
     }
   }
 }
