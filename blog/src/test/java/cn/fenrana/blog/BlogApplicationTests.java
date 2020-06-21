@@ -1,6 +1,7 @@
 package cn.fenrana.blog;
 
 
+import cn.fenrana.blog.entity.Tag;
 import cn.fenrana.blog.mapper.ArticleCategoryMapper;
 import cn.fenrana.blog.mapper.ArticleMapper;
 import cn.fenrana.blog.mapper.ArticleTagMapper;
@@ -32,8 +33,11 @@ class BlogApplicationTests {
 //        System.out.println(maps);
 //        List<Map<String, Object>> maps = articleTagMapper.selectTagCount();
 //        System.out.println(maps);
-        List<Map<String, Object>> maps = articleMapper.selectArchiveCount();
-        System.out.println(maps);
+//        List<Map<String, Object>> maps = articleMapper.selectArchiveCount();
+//        System.out.println(maps);
+
+        List<Tag> tags = articleTagMapper.selectTagByArticleId(6L);
+        System.out.println(tags);
     }
 
 }

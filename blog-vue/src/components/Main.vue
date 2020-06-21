@@ -18,8 +18,13 @@
               {{ item.summary }}
             </div>
             <div class="tag">
-              <el-tag size="small" type="info">java</el-tag>
-              <el-tag size="small" type="info">spring</el-tag>
+              <el-tag
+                size="small"
+                type="info"
+                v-for="tagItem in item.tags"
+                :key="tagItem.id"
+                >{{ tagItem.name }}</el-tag
+              >
             </div>
             <div class="foot">
               <div class="foot-left">
@@ -34,7 +39,7 @@
               </div>
               <div class="foot-right">
                 <i class="iconfont el-icon-date"></i>
-                <span>2020-06-12</span>
+                <span>{{ getTimeByTimestamp(item.createTime) }}</span>
               </div>
             </div>
           </div>
@@ -55,6 +60,7 @@
 import Sidebar from "./Sidebar";
 import { getRequest } from "../utils/request";
 import { httpCodeValidate } from "../utils/HttpCodeValidate";
+
 export default {
   name: "Main",
   created() {
@@ -69,6 +75,16 @@ export default {
   components: {
     Sidebar
   },
+  methods: {
+    getTimeByTimestamp(timestamp) {
+      var date = new Date(timestamp + 8 * 3600 * 1000);
+      return date
+        .toJSON()
+        .substr(0, 10)
+        .replace("T", " ")
+        .replace(/-/g, ".");
+    }
+  },
   data() {
     return {
       articles: [],
@@ -82,6 +98,7 @@ export default {
 
 <style scoped lang="scss">
 @import "../assets/styles/common.scss";
+
 .main {
   /*width: 70%;*/
   .cart {
@@ -93,25 +110,30 @@ export default {
     border-radius: 8px;
     justify-content: space-between;
     padding: 10px;
+
     .cart-left {
       border-radius: 10px;
       overflow: hidden;
       width: 40%;
       cursor: pointer;
     }
+
     .cart-right {
       width: 58%;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+
       .title {
         font-size: 18px;
         font-weight: bold;
         cursor: pointer;
+
         &:hover {
           color: #e67e22;
         }
       }
+
       .center {
         height: 38%;
         overflow: hidden;
@@ -120,30 +142,36 @@ export default {
         -webkit-line-clamp: 4;
         -webkit-box-orient: vertical;
       }
+
       .tag {
         /*background-color: darkkhaki;*/
         & > span:nth-child(n + 2) {
           margin-left: 10px;
         }
       }
+
       .foot {
         /*background-color: #ebebeb;*/
         display: flex;
         justify-content: space-between;
         align-items: center;
+
         .foot-left {
           display: flex;
           justify-content: center;
           align-items: center;
+
           & > div:nth-child(n + 2) {
             margin-left: 10px;
           }
+
           & span {
             margin-left: 5px;
             color: #959595;
             font-size: 14px;
           }
         }
+
         .foot-right {
           span {
             margin-left: 5px;
@@ -161,12 +189,14 @@ export default {
     margin: 15px auto;
   }
 }
+
 @media screen and (max-width: 768px) {
   .main {
     .cart {
       .cart-left {
         display: none;
       }
+
       .cart-right {
         width: 100%;
       }
@@ -178,8 +208,10 @@ export default {
   .main {
   }
 }
+
 @media screen and (min-width: 992px) and (max-width: 1200px) {
 }
+
 @media screen and (min-width: 1200px) {
 }
 </style>

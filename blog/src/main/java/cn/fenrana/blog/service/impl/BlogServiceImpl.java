@@ -3,20 +3,21 @@ package cn.fenrana.blog.service.impl;
 import cn.fenrana.blog.entity.Article;
 import cn.fenrana.blog.entity.ArticleTag;
 import cn.fenrana.blog.entity.Tag;
+import cn.fenrana.blog.entity.dto.ArticleDto;
 import cn.fenrana.blog.mapper.ArticleCategoryMapper;
 import cn.fenrana.blog.mapper.ArticleMapper;
 import cn.fenrana.blog.mapper.ArticleTagMapper;
 import cn.fenrana.blog.mapper.TagMapper;
 import cn.fenrana.blog.service.IBlogService;
 import cn.fenrana.blog.utils.ResultJson;
+import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class BlogServiceImpl implements IBlogService {
@@ -25,6 +26,8 @@ public class BlogServiceImpl implements IBlogService {
     private ArticleMapper articleMapper;
     @Resource
     private ArticleTagMapper articleTagMapper;
+    @Resource
+    private TagMapper tagMapper;
     @Resource
     private ArticleCategoryMapper articleCategoryMapper;
 
@@ -50,12 +53,22 @@ public class BlogServiceImpl implements IBlogService {
         page.setCurrent(current);
         QueryWrapper<Article> articleQueryWrapper = new QueryWrapper<>();
         //要查询的列, 由于content的数据量太大
-        articleQueryWrapper.select("id", "title","author", "cover", "category_id", "state", "publish_time", "create_time", "type", "visits", "summary", "disallow_comment", "is_top");
-
+        articleQueryWrapper.select("id", "title", "author", "cover", "category_id", "state", "publish_time", "create_time", "type", "visits", "summary", "disallow_comment", "is_top");
         Page<Article> articlePage = articleMapper.selectPage(page, articleQueryWrapper);
+        List<Article> records = articlePage.getRecords();
+        List<ArticleDto> articleDtos = new ArrayList<>();
+        //封装标签
+        records.forEach(item -> {
+            List<Tag> tags = articleTagMapper.selectTagByArticleId(item.getId());
+            ArticleDto articleDto = new ArticleDto();
+            BeanUtil.copyProperties(item, articleDto);
+            articleDto.setTags(tags);
+            articleDtos.add(articleDto);
+            item = null;
+        });
         Map<String, Object> map = new HashMap<>();
         map.put("total", articlePage.getTotal());
-        map.put("articles", articlePage.getRecords());
+        map.put("articles", articleDtos);
         return ResultJson.ok(map);
     }
 
