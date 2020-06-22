@@ -10,4 +10,6 @@ public interface IBlogService {
     ResultJson<Map<String, Object>> getAsideInfo();
 
     ResultJson<Map<String, Object>> getArticles(Long current);
+
+    ResultJson<Article> getArticleById(Long id);
 }

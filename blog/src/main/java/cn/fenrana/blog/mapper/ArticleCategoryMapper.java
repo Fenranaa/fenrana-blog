@@ -22,6 +22,9 @@ import java.util.Map;
 public interface ArticleCategoryMapper extends BaseMapper<ArticleCategory> {
 
 
+    /**
+     * 查询分类下面有几篇文章
+     * */
     @Select("SELECT COUNT(ac.category_id) as category_count, ac.category_id, c.name\n" +
             "FROM article_category as ac\n" +
             "INNER JOIN category as c\n" +
@@ -33,5 +36,4 @@ public interface ArticleCategoryMapper extends BaseMapper<ArticleCategory> {
             @Result(column = "name", property = "name")
     })
     List<Map<String, Object>> selectCategoryCount();
-
 }

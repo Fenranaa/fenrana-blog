@@ -2,12 +2,10 @@ package cn.fenrana.blog.service.impl;
 
 import cn.fenrana.blog.entity.Article;
 import cn.fenrana.blog.entity.ArticleTag;
+import cn.fenrana.blog.entity.Category;
 import cn.fenrana.blog.entity.Tag;
 import cn.fenrana.blog.entity.dto.ArticleDto;
-import cn.fenrana.blog.mapper.ArticleCategoryMapper;
-import cn.fenrana.blog.mapper.ArticleMapper;
-import cn.fenrana.blog.mapper.ArticleTagMapper;
-import cn.fenrana.blog.mapper.TagMapper;
+import cn.fenrana.blog.mapper.*;
 import cn.fenrana.blog.service.IBlogService;
 import cn.fenrana.blog.utils.ResultJson;
 import cn.hutool.core.bean.BeanUtil;
@@ -30,6 +28,8 @@ public class BlogServiceImpl implements IBlogService {
     private TagMapper tagMapper;
     @Resource
     private ArticleCategoryMapper articleCategoryMapper;
+    @Resource
+    private CategoryMapper categoryMapper;
 
     @Override
     public ResultJson<Map<String, Object>> getAsideInfo() {
@@ -72,4 +72,15 @@ public class BlogServiceImpl implements IBlogService {
         return ResultJson.ok(map);
     }
 
+    @Override
+    public ResultJson<Article> getArticleById(Long id) {
+        List<Tag> tags = articleTagMapper.selectTagByArticleId(id);
+        Article article = articleMapper.selectById(id);
+        Category category = categoryMapper.selectById(article.getCategoryId());
+        ArticleDto articleDto = new ArticleDto();
+        BeanUtil.copyProperties(article, articleDto);
+        articleDto.setTags(tags);
+        articleDto.setCategory(category);
+        return ResultJson.ok(articleDto);
+    }
 }

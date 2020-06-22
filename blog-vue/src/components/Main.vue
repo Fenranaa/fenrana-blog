@@ -11,7 +11,7 @@
             ></el-image>
           </div>
           <div class="cart-right">
-            <div class="title">
+            <div class="title" @click="toArticlePage(item.id)">
               {{ item.title }}
             </div>
             <div class="center">
@@ -23,8 +23,8 @@
                 type="info"
                 v-for="tagItem in item.tags"
                 :key="tagItem.id"
-                >{{ tagItem.name }}</el-tag
-              >
+                >{{ tagItem.name }}
+              </el-tag>
             </div>
             <div class="foot">
               <div class="foot-left">
@@ -45,7 +45,7 @@
           </div>
         </div>
         <div class="page">
-          <el-pagination background layout="prev, pager, next" :total="1000">
+          <el-pagination background layout="prev, pager, next" :total="total">
           </el-pagination>
         </div>
       </el-col>
@@ -66,7 +66,6 @@ export default {
   created() {
     getRequest("/common/articles", { current: this.current }).then(res => {
       httpCodeValidate(res, () => {
-        window.console.log(res);
         this.total = res.data.data.total;
         this.articles = res.data.data.articles;
       });
@@ -83,6 +82,11 @@ export default {
         .substr(0, 10)
         .replace("T", " ")
         .replace(/-/g, ".");
+    },
+    toArticlePage(id) {
+      this.$router.push({
+        path: "article/" + id
+      });
     }
   },
   data() {

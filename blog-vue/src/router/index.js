@@ -16,6 +16,7 @@ import Seting from "../views/admin/components/Seting";
 import Tools from "../views/admin/components/Tools";
 import About from "../views/admin/components/About";
 import Index from "../views/Index";
+import Article from "../views/Article";
 import Main from "../components/Main";
 import Cookies from "js-cookie";
 
@@ -34,6 +35,11 @@ const routes = [
         component: Main
       }
     ]
+  },
+  {
+    path: "/article/:id",
+    name: "article",
+    component: Article
   },
   {
     path: "/login",
