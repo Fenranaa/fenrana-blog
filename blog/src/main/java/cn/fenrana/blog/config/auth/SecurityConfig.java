@@ -43,7 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .failureHandler(myAuthenticationFailureHandler)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/login", "/admin/file/upload", "/common/*").permitAll()
+                .antMatchers("/login","/swagger-ui.html", "/admin/file/upload", "/common/*").permitAll()
                 .antMatchers("/admin/**").hasAnyRole("admin")
 //                .anyRequest().authenticated()
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)

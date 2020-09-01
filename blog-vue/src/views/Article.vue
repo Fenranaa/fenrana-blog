@@ -28,6 +28,10 @@
         </ul>
       </div>
     </div>
+    <Comment />
+    <div class="foot">
+      <Foot />
+    </div>
   </div>
 </template>
 
@@ -36,6 +40,8 @@ var elementResizeDetectorMaker = require("element-resize-detector");
 import Header from "../components/Header";
 import { getRequest } from "../utils/request";
 import { httpCodeValidate } from "../utils/HttpCodeValidate";
+import Foot from "../components/Foot";
+import Comment from "../components/Comment";
 
 export default {
   name: "Article",
@@ -148,7 +154,7 @@ export default {
           document.documentElement.clientHeight ||
           document.body.clientHeight;
       }
-      this.setDirectoryStyle(null, null, this.clientHeight - 100);
+      this.setDirectoryStyle(null, null, this.clientHeight * 0.6);
 
       //监听屏幕滚动
       this.listenScroll();
@@ -174,12 +180,16 @@ export default {
             let aTop = a.offsetTop;
             if (scrollTop > aTop) {
               this.directoryIndex = i;
-              if (directoryDom[i].offsetTop > this.clientHeight - 50) {
-                articleBodyRightDom.scrollTop = directoryDom[i].offsetTop - 100;
-              }
             } else {
               break;
             }
+          }
+          if (
+            directoryDom[this.directoryIndex].offsetTop >
+            this.clientHeight - 50
+          ) {
+            articleBodyRightDom.scrollTop =
+              directoryDom[this.directoryIndex].offsetTop - 100;
           }
         }, 250),
         true
@@ -187,8 +197,9 @@ export default {
     }
   },
   components: {
-    Header
-    // Demo
+    Header,
+    Foot,
+    Comment
   }
 };
 </script>
@@ -198,7 +209,11 @@ export default {
   .article-body {
     width: 70%;
     margin: 10px auto;
-
+    &::after {
+      content: "";
+      clear: both;
+      display: block;
+    }
     .article-body-left {
       float: left;
       width: 70%;
@@ -267,6 +282,11 @@ export default {
         }
       }
     }
+  }
+
+  .foot {
+    // clear: both;
+    // padding-top: 20px;
   }
 }
 </style>

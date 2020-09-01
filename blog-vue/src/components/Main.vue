@@ -104,7 +104,9 @@ export default {
 @import "../assets/styles/common.scss";
 
 .main {
-  /*width: 70%;*/
+  .el-row {
+    margin: 0 !important;
+  }
   .cart {
     margin-top: 10px;
     height: 230px;

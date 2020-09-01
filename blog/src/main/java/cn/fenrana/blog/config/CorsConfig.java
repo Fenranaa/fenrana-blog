@@ -32,11 +32,9 @@ public class CorsConfig {
         config.addExposedHeader("Access-Control-Request-Headers");
         //暴露哪些头部信息（因为跨域访问默认不能获取全部头部信息）
 //        config.addExposedHeader("*");
-
         //2.添加映射路径
         UrlBasedCorsConfigurationSource configSource = new UrlBasedCorsConfigurationSource();
         configSource.registerCorsConfiguration("/**", config);
-
         //3.返回新的CorsFilter.
         return new CorsFilter(configSource);
     }*/
@@ -47,7 +45,7 @@ public class CorsConfig {
         CorsConfiguration configuration = new CorsConfiguration();
 //        configuration.setAllowedOrigins(Arrays.asList("http://localhost:8080"));
         configuration.addAllowedOrigin("*");
-        configuration.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
         configuration.applyPermitDefaultValues();
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);

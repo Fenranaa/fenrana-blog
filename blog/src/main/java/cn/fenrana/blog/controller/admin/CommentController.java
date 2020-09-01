@@ -1,6 +1,9 @@
 package cn.fenrana.blog.controller.admin;
 
 
+import cn.fenrana.blog.entity.Comment;
+import cn.fenrana.blog.utils.ResultJson;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
@@ -14,7 +17,10 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2019-11-05
  */
 @RestController
-@RequestMapping("/blog/comment")
 public class CommentController {
+    @PostMapping("admin/addComment")
+    public ResultJson addComment(Comment comment) {
+        return null;
+    }
 
 }

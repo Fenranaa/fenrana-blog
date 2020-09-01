@@ -4,18 +4,20 @@
     <div>
       <router-view />
     </div>
-    <div>333</div>
+    <Foot />
   </div>
 </template>
 
 <script>
 import Header from "../components/Header";
 import "element-ui/lib/theme-chalk/display.css";
+import Foot from "../components/Foot";
 
 export default {
   name: "Index",
   components: {
-    Header
+    Header,
+    Foot
   }
 };
 </script>
