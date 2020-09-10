@@ -7,6 +7,7 @@ import java.io.Serializable;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 /**
  * <p>
@@ -62,7 +63,7 @@ public class Comment implements Serializable {
     /**
      * 留言时间
      */
-    private LocalDateTime time;
+    private Long time;
 
     /**
      * 留言内容
@@ -85,19 +86,9 @@ public class Comment implements Serializable {
     private Long sort;
 
     /**
-     * IP地址
-     */
-    private String ip;
-
-    /**
-     * 设备
-     */
-    private String device;
-
-    /**
-     * 地址
-     */
-    private String address;
+     * 文章状态: 0:未审核，1:审核通过，2:审核未通过
+     * */
+    public Integer status;
 
 
 }

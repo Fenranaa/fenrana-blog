@@ -11,7 +11,7 @@ const instance = axios.create({
 //请求拦截
 //所有的网络请求都会走这个方法
 instance.interceptors.request.use(config => {
-  if (!config.url.search("admin")) {
+  if (config.url.includes("admin")) {
     var loginToken = Cookies.get("loginToken");
     config.headers.JWTHeaderName = loginToken;
   }
@@ -24,8 +24,8 @@ instance.interceptors.response.use(
     return response;
   },
   error => {
-    window.console.log(error.response.status);
-    if (error.response.status) {
+    window.console.log(error);
+    if (error.response.status === 500) {
       Message.error("登录失效, 请重新登录");
       Cookies.remove("loginToken");
       this.$router.push({ path: "/login" });

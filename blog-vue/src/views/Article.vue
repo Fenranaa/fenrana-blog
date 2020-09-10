@@ -10,6 +10,12 @@
           v-model="article.content"
           :ishljs="true"
         />
+        <Comment
+          v-if="article.disallowComment"
+          :disallowComment="article.disallowComment"
+          :articleId="article.id"
+          :articleTitle="article.title"
+        />
       </div>
       <div class="article-body-right">
         <ul class="directory">
@@ -28,7 +34,7 @@
         </ul>
       </div>
     </div>
-    <Comment />
+
     <div class="foot">
       <Foot />
     </div>
@@ -217,7 +223,7 @@ export default {
     .article-body-left {
       float: left;
       width: 70%;
-      background-color: #ffffff;
+      background-color: #ebebeb;
     }
 
     .article-body-right {
@@ -236,7 +242,11 @@ export default {
         padding: 0;
         margin: 0;
         .active {
-          border-left: 2px solid red !important;
+          border-left: 2px solid #25b864 !important;
+          color: #25b864 !important;
+          a {
+            color: #25b864 !important;
+          }
         }
         .directory-item {
           box-sizing: border-box;
@@ -258,6 +268,10 @@ export default {
             &:hover {
               color: #8c8c8c;
             }
+          }
+
+          .aactive {
+            color: #25b864 !important;
           }
 
           .directory-item-link-1 {

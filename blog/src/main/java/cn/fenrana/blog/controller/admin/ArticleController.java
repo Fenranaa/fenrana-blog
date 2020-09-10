@@ -3,7 +3,7 @@ package cn.fenrana.blog.controller.admin;
 
 import cn.fenrana.blog.entity.*;
 import cn.fenrana.blog.entity.dto.ArticleDto;
-import cn.fenrana.blog.entity.param.PageParam;
+import cn.fenrana.blog.entity.param.ArticlePageParam;
 import cn.fenrana.blog.utils.ResultJson;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
@@ -69,7 +69,7 @@ public class ArticleController {
      * 查询文章
      * */
     @PostMapping("admin/articles")
-    public ResultJson<Map<String, Object>> articleList(@RequestBody PageParam pageParam) {
+    public ResultJson<Map<String, Object>> articleList(@RequestBody ArticlePageParam pageParam) {
         Page<Article> page = new Page<>();
         page.setCurrent(pageParam.getCurrent());
         page.setSize(pageParam.getSize());

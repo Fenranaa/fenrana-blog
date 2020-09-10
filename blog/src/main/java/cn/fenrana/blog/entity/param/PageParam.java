@@ -1,35 +1,17 @@
 package cn.fenrana.blog.entity.param;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.experimental.Accessors;
+import lombok.NoArgsConstructor;
 
 @Data
-@EqualsAndHashCode(callSuper = false)
-@Accessors(chain = true)
+@AllArgsConstructor
 public class PageParam {
-    /**
-     * 搜索关键字
-     * */
-    private String searchKey;
-    /**
-     * 文章状态
-     * */
-    private String state;
-    /**
-     * 文章分类
-     * */
-    private Long categoryId;
-
-    /**
-     * 当前页
-     * */
+    private Integer size;
     private Integer current;
 
-    /**
-     * 每页显示的条数
-     * */
-    private Integer size;
-
-
+    public PageParam() {
+        this.current = 1;
+        this.size = 10;
+    }
 }

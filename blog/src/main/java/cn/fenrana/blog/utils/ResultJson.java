@@ -41,7 +41,7 @@ public class ResultJson<T> implements Serializable {
         this.msg = msg;
     }
 
-    ResultJson(int code, T data, String msg) {
+    public ResultJson(int code, T data, String msg) {
         this.code = code;
         this.msg = msg;
         this.data = data;
