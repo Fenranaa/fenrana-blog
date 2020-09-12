@@ -8,6 +8,7 @@ import mavonEditor from "mavon-editor";
 import "mavon-editor/dist/css/index.css";
 import axios from "axios";
 import VueAxios from "vue-axios";
+import "element-ui/lib/theme-chalk/display.css";
 
 Vue.config.productionTip = false;
 Vue.use(ElementUI);

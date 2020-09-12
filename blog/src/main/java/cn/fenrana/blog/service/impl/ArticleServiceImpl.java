@@ -18,9 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -98,6 +97,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     /**
      * 彻底删除文章
+     *
      * @param id 文章id
      */
     @Override
@@ -114,12 +114,28 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
             articleCategoryQueryWrapper.eq("article_id", id);
             articleCategoryMapper.delete(articleCategoryQueryWrapper);
             return ResultJson.ok();
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return ResultJson.fail();
         }
     }
 
+    /**
+     * 查询出一个年份的所有文章
+     */
+    @Override
+    public ResultJson<List<Map<String, Object>>> selectArticleByYear() {
+        List<Integer> years = articleMapper.selectArticleYear();
+        List<Map<String, Object>> list = new ArrayList<>();
+        for (int year : years) {
+            Map<String, Object> map = new LinkedHashMap<>();
+            List<Map<String, Object>> maps = articleMapper.selectArticleByYear(String.valueOf(year));
+            map.put("year", year);
+            map.put("data", maps);
+            list.add(map);
+        }
+        return ResultJson.ok(list);
+    }
 
     /**
      * 把标签插入数据库
@@ -146,4 +162,6 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         articleCategory.setCategoryId(categoryId);
         articleCategoryMapper.insert(articleCategory);
     }
+
+
 }

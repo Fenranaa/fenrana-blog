@@ -1,63 +1,56 @@
 <template>
   <div class="main">
-    <el-row :gutter="20" type="flex" justify="center">
-      <el-col :xs="22" :sm="20" :md="13" :lg="12">
-        <div class="cart" v-for="item in articles" :key="item.id">
-          <div class="cart-left">
-            <el-image
-              style="width: 100%; height: 100%"
-              :src="item.cover"
-              fit="cover"
-            ></el-image>
-          </div>
-          <div class="cart-right">
-            <div class="title" @click="toArticlePage(item.id)">
-              {{ item.title }}
+    <div class="cart" v-for="item in articles" :key="item.id">
+      <div class="cart-left">
+        <el-image
+          style="width: 100%; height: 100%"
+          :src="item.cover"
+          fit="cover"
+        ></el-image>
+      </div>
+      <div class="cart-right">
+        <div class="title" @click="toArticlePage(item.id)">
+          {{ item.title }}
+        </div>
+        <div class="center">
+          {{ item.summary }}
+        </div>
+        <div class="tag">
+          <el-tag
+            size="small"
+            type="info"
+            v-for="tagItem in item.tags"
+            :key="tagItem.id"
+            >{{ tagItem.name }}
+          </el-tag>
+        </div>
+        <div class="foot">
+          <div class="foot-left">
+            <div>
+              <i class="iconfont el-icon-user"></i>
+              <span>{{ item.author }}</span>
             </div>
-            <div class="center">
-              {{ item.summary }}
-            </div>
-            <div class="tag">
-              <el-tag
-                size="small"
-                type="info"
-                v-for="tagItem in item.tags"
-                :key="tagItem.id"
-                >{{ tagItem.name }}
-              </el-tag>
-            </div>
-            <div class="foot">
-              <div class="foot-left">
-                <div>
-                  <i class="iconfont el-icon-user"></i>
-                  <span>{{ item.author }}</span>
-                </div>
-                <div>
-                  <i class="iconfont el-icon-chat-dot-round"></i>
-                  <span>{{ item.visits }}</span>
-                </div>
-              </div>
-              <div class="foot-right">
-                <i class="iconfont el-icon-date"></i>
-                <span>{{ getTimeByTimestamp(item.createTime) }}</span>
-              </div>
+            <div>
+              <i class="iconfont el-icon-chat-dot-round"></i>
+              <span>{{ item.visits }}</span>
             </div>
           </div>
+          <div class="foot-right">
+            <i class="iconfont el-icon-date"></i>
+            <span>{{ getTimeByTimestamp(item.createTime) }}</span>
+          </div>
         </div>
-        <div class="page">
-          <el-pagination background layout="prev, pager, next" :total="total">
-          </el-pagination>
-        </div>
-      </el-col>
-      <el-col :xs="0" :sm="1" :md="4" :lg="4" class="hidden-sm-only">
-        <Sidebar />
-      </el-col>
-    </el-row>
+      </div>
+    </div>
+    <div class="page">
+      <el-pagination background layout="prev, pager, next" :total="total">
+      </el-pagination>
+    </div>
   </div>
 </template>
 
 <script>
-import Sidebar from "./Sidebar";
+// import Sidebar from "./Sidebar";
 import { getRequest } from "../utils/request";
 import { httpCodeValidate } from "../utils/HttpCodeValidate";
 
@@ -72,7 +65,7 @@ export default {
     });
   },
   components: {
-    Sidebar
+    // Sidebar
   },
   methods: {
     getTimeByTimestamp(timestamp) {
@@ -104,9 +97,6 @@ export default {
 @import "../assets/styles/common.scss";
 
 .main {
-  .el-row {
-    margin: 0 !important;
-  }
   .cart {
     margin-top: 10px;
     height: 230px;
@@ -191,8 +181,8 @@ export default {
   }
 
   .page {
-    width: 470px;
-    margin: 15px auto;
+    // width: 100%;
+    // margin: 15px auto;
   }
 }
 

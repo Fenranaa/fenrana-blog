@@ -2,6 +2,7 @@ package cn.fenrana.blog.controller.common;
 
 import cn.fenrana.blog.entity.Article;
 import cn.fenrana.blog.entity.Comment;
+import cn.fenrana.blog.service.IArticleService;
 import cn.fenrana.blog.service.IBlogService;
 import cn.fenrana.blog.service.ICommentService;
 import cn.fenrana.blog.utils.ResultJson;
@@ -25,6 +26,9 @@ public class BlogController {
 
     @Autowired
     private ICommentService commentService;
+
+    @Autowired
+    private IArticleService articleService;
 
     /**
      * 获取侧边栏的各种信息
@@ -66,5 +70,14 @@ public class BlogController {
     @PostMapping("/comment")
     public ResultJson<Comment> addComment(@RequestBody Comment comment) {
         return commentService.addComment(comment);
+    }
+
+    /**
+     * 分年查询文章
+     */
+    @ApiOperation("")
+    @GetMapping("/article/year")
+    public ResultJson<List<Map<String, Object>>> selectArticleByYear() {
+        return articleService.selectArticleByYear();
     }
 }

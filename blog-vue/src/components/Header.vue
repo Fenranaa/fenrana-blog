@@ -18,7 +18,7 @@
           <i class="iconfont icon-leimupinleifenleileibie"></i>
           <span>分类</span>
         </div>
-        <div class="navbar-item">
+        <div class="navbar-item" @click="toPage('/archives')">
           <i class="iconfont icon-shizhong"></i>
           <span>时光轴</span>
         </div>
@@ -37,7 +37,13 @@
 
 <script>
 export default {
-  name: "Header"
+  name: "Header",
+  methods: {
+    toPage(url) {
+      // this.setBreadcrumb(data);
+      this.$router.push({ path: url });
+    }
+  }
 };
 </script>
 
