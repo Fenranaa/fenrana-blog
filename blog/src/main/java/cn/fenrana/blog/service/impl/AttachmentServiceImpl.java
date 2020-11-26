@@ -24,6 +24,7 @@ import org.springframework.util.ResourceUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -67,7 +68,7 @@ public class AttachmentServiceImpl extends ServiceImpl<AttachmentMapper, Attachm
             attachment.setName(fileName);
             attachment.setSuffix(fileNameSplit[1]);
             LocalDateTime now = LocalDateTime.now();
-            attachment.setCreateTime(now);
+            attachment.setCreateTime(Instant.now().toEpochMilli());
             attachment.setMediaType(contentType);
             attachment.setSize(size);
             attachment.setSaveLocation("本地");

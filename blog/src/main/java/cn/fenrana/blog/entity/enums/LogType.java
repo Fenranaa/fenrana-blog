@@ -67,7 +67,11 @@ public enum LogType {
     /**
      * 修改文章分类
      */
-    CATEGORY_UPDATE("修改文章分类");
+    CATEGORY_UPDATE("修改文章分类"),
+    /**
+     * 其他
+     * */
+    OTHER("其他");
 
 
     private final String value;

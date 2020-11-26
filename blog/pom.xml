@@ -124,6 +124,13 @@
             <version>2.0.4</version>
         </dependency>
 
+        <!--springboot集成Aop-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+
+
 
     </dependencies>
 

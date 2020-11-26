@@ -20,7 +20,7 @@ public class Attachment {
     /**
      * 创建时间
      * */
-    private LocalDateTime createTime;
+    private Long createTime;
     /**
      * 附件类型
      * */

@@ -113,8 +113,15 @@ export default {
         this.archiveCount = res.data.data.archiveCount;
         this.categoryCount = res.data.data.categoryCount;
         this.tagCount = res.data.data.tagCount;
+        this.saveCategory(res.data.data.categoryCount);
       });
     });
+  },
+  methods: {
+    saveCategory(categorys) {
+      var a = JSON.stringify(categorys);
+      localStorage.setItem("categorys", a);
+    }
   },
   data() {
     return {

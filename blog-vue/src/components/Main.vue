@@ -56,9 +56,14 @@ import { httpCodeValidate } from "../utils/HttpCodeValidate";
 
 export default {
   name: "Main",
+  props: {
+    articleParam: { type: Object }
+  },
   created() {
+    window.console.log(this.articleParam);
     getRequest("/common/articles", { current: this.current }).then(res => {
       httpCodeValidate(res, () => {
+        window.console.log(res);
         this.total = res.data.data.total;
         this.articles = res.data.data.articles;
       });

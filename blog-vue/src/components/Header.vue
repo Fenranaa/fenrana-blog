@@ -10,15 +10,27 @@
       </label>
       <input id="toggle-nav" type="checkbox" />
       <div class="navbar">
-        <div class="navbar-item">
+        <div
+          class="navbar-item"
+          :class="currentPage === '/' ? 'active' : ''"
+          @click="toPage('/')"
+        >
           <i class="iconfont icon-shouye"></i>
           <span>首页</span>
         </div>
-        <div class="navbar-item">
+        <div
+          class="navbar-item"
+          :class="currentPage === '/category' ? 'active' : ''"
+          @click="toPage('/category')"
+        >
           <i class="iconfont icon-leimupinleifenleileibie"></i>
           <span>分类</span>
         </div>
-        <div class="navbar-item" @click="toPage('/archives')">
+        <div
+          class="navbar-item"
+          :class="currentPage === '/archives' ? 'active' : ''"
+          @click="toPage('/archives')"
+        >
           <i class="iconfont icon-shizhong"></i>
           <span>时光轴</span>
         </div>
@@ -38,10 +50,24 @@
 <script>
 export default {
   name: "Header",
+  data() {
+    return {
+      currentPage: "/"
+    };
+  },
+  created() {
+    var a = localStorage.getItem("currentPage");
+    window.console.log(a);
+    if (a) {
+      this.currentPage = a;
+    }
+  },
   methods: {
     toPage(url) {
       // this.setBreadcrumb(data);
       this.$router.push({ path: url });
+      localStorage.setItem("currentPage", url);
+      this.currentPage = url;
     }
   }
 };
@@ -72,6 +98,10 @@ export default {
       display: none;
     }
     .navbar {
+      .active {
+        color: #409eff;
+        // background-color: #409eff;
+      }
       .navbar-item {
         cursor: pointer;
         height: 50px;

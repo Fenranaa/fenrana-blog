@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 
 import javax.annotation.Resource;
 import java.time.Instant;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -36,8 +37,17 @@ class BlogApplicationTests {
 //        List<Map<String, Object>> maps = articleMapper.selectArchiveCount();
 //        System.out.println(maps);
 
-        List<Tag> tags = articleTagMapper.selectTagByArticleId(6L);
-        System.out.println(tags);
+//        List<Tag> tags = articleTagMapper.selectTagByArticleId(6L);
+//        System.out.println(tags);
+
+        Map<String, String> map = new HashMap<>();
+        map.put("asd", "111");
+
+        map.forEach((k,v) -> {
+            System.out.println(k + ":" + v);
+        });
+
+
     }
 
 }

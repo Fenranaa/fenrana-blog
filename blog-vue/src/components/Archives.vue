@@ -62,7 +62,7 @@ export default {
     line-height: 2;
     font-weight: 900;
     color: #363636;
-    border-bottom: 1px solid red;
+    border-bottom: 1px solid rgb(58, 56, 56);
   }
 
   .item {
@@ -78,7 +78,7 @@ export default {
     word-break: break-all;
     cursor: pointer;
     &:hover {
-      background: blue;
+      background: rgba(40, 122, 237, 0.1);
       border-radius: 10px;
     }
     font-family: "Varela Round", "Microsoft YaHei", "Source Sans Pro",

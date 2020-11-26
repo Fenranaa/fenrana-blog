@@ -31,5 +31,10 @@ public class ArticlePageParam {
      * */
     private Integer size;
 
+    public ArticlePageParam() {
+        this.current = 1;
+        this.size = 10;
+    }
+
 
 }

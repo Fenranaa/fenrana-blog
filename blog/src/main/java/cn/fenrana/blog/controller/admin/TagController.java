@@ -1,8 +1,8 @@
 package cn.fenrana.blog.controller.admin;
 
 
+import cn.fenrana.blog.annotation.OperateLog;
 import cn.fenrana.blog.entity.Category;
-import cn.fenrana.blog.entity.Log;
 import cn.fenrana.blog.entity.Tag;
 import cn.fenrana.blog.entity.enums.LogType;
 import cn.fenrana.blog.event.LogEvent;
@@ -12,10 +12,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.http.HttpRequest;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -45,6 +43,7 @@ public class TagController {
      * 添加标签
      */
     @PostMapping("/admin/addTag")
+    @OperateLog
     public ResultJson<Tag> addTag(@RequestBody Tag tag) throws JsonProcessingException {
         boolean b = iTagService.save(tag);
         //记录日志

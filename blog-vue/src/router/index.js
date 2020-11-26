@@ -20,6 +20,7 @@ import Article from "../views/Article";
 import Main from "../components/Main";
 import Cookies from "js-cookie";
 import Archives from "../components/Archives.vue";
+import Category from "../components/Category.vue";
 
 Vue.use(VueRouter);
 
@@ -39,6 +40,11 @@ const routes = [
         path: "/archives",
         name: "archives",
         component: Archives
+      },
+      {
+        path: "/category",
+        name: "category",
+        component: Category
       }
     ]
   },

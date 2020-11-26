@@ -49,13 +49,14 @@ public class ArticleController {
     /**
      * 保存文章
      */
+    //TODO 去掉接受参数的map
     @PostMapping(value = "/admin/addArticle")
     public ResultJson<Object> addArticle(@RequestBody Map<String, Object> map) {
         try {
-            if (ObjectUtil.isEmpty(map.get("id"))){
+            if (ObjectUtil.isEmpty(map.get("id"))) {
                 return iArticleService.addArticle(map);
-            }else {
-                return  iArticleService.updateArticle(map);
+            } else {
+                return iArticleService.updateArticle(map);
             }
 
         } catch (Exception e) {
@@ -70,58 +71,8 @@ public class ArticleController {
      * */
     @PostMapping("admin/articles")
     public ResultJson<Map<String, Object>> articleList(@RequestBody ArticlePageParam pageParam) {
-        Page<Article> page = new Page<>();
-        page.setCurrent(pageParam.getCurrent());
-        page.setSize(pageParam.getSize());
-        QueryWrapper<Article> queryWrapper = new QueryWrapper<>();
-        //要查询的列
-        queryWrapper.select("id", "title", "cover","content", "category_id", "state", "publish_time", "create_time", "type", "visits", "summary", "disallow_comment", "is_top");
-        //根据标题模糊查询调价
-        if (StrUtil.isNotBlank(pageParam.getSearchKey())) {
-            queryWrapper.like("title", pageParam.getSearchKey());
-        }
-        Map<String, String> map = new HashMap<>();
-        if (pageParam.getCategoryId() != null) {
-            map.put("category_id", pageParam.getCategoryId().toString());
 
-        }
-        if (StrUtil.isNotBlank(pageParam.getState())) {
-            map.put("state", pageParam.getState());
-        }
-        queryWrapper.allEq(map, false);
-        IPage<Article> articles = iArticleService.page(page, queryWrapper);
-        long total = articles.getTotal();
-        List<Article> records = articles.getRecords();
-        List<ArticleDto> articleDtoList = new ArrayList<>();
-        // 标签查询
-        records.forEach(
-                item -> {
-                    // 查标签
-                    QueryWrapper<ArticleTag> articleTagQueryWrapper1 = new QueryWrapper<>();
-                    articleTagQueryWrapper1.eq("article_id", item.getId());
-                    List<ArticleTag> articleTags = iArticleTagService.list(articleTagQueryWrapper1);
-                    List<Long> tagsId =
-                            articleTags.stream().map(ArticleTag::getTagId).collect(Collectors.toList());
-                    Collection<Tag> tags = iTagService.listByIds(tagsId);
-
-                    //查分类
-                    QueryWrapper<Category> categoryQueryWrapper = new QueryWrapper<>();
-                    categoryQueryWrapper.eq("id", item.getCategoryId());
-                    Category category = iCategoryService.getOne(categoryQueryWrapper);
-//                    item.setCategory(category.getName());
-
-                    //数据封装
-                    ArticleDto articleDto = new ArticleDto();
-                    BeanUtil.copyProperties(item, articleDto);
-                    articleDto.setCategory(category);
-                    articleDto.setTags((List<Tag>) tags);
-                    articleDto.setTagsId(tagsId);
-                    articleDtoList.add(articleDto);
-                });
-        Map<String, Object> dataMap = new HashMap<>();
-        dataMap.put("total", total);
-        dataMap.put("data", articleDtoList);
-        return ResultJson.ok(dataMap);
+        return iArticleService.selectArticleByParam(pageParam);
     }
 
     /**
@@ -148,18 +99,20 @@ public class ArticleController {
             return ResultJson.fail();
         }
     }
+
     /**
      * 文章的删除
-     * */
+     */
     @GetMapping("admin/articleDelete/{id}")
-    public ResultJson<Object> articleDelete(@PathVariable Long id){
+    public ResultJson<Object> articleDelete(@PathVariable Long id) {
         try {
             return iArticleService.articleDelete(id);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return ResultJson.fail();
         }
     }
+
     /**
      * 修改文章状态的封装
      */

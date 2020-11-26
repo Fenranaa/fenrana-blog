@@ -1,6 +1,7 @@
 package cn.fenrana.blog.service;
 
 import cn.fenrana.blog.entity.Article;
+import cn.fenrana.blog.entity.param.ArticlePageParam;
 import cn.fenrana.blog.utils.ResultJson;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -29,4 +30,6 @@ public interface IArticleService extends IService<Article> {
     ResultJson<Object> articleDelete(Long id);
 
     ResultJson<List<Map<String, Object>>> selectArticleByYear();
+
+    ResultJson<Map<String, Object>> selectArticleByParam(ArticlePageParam articlePageParam);
 }

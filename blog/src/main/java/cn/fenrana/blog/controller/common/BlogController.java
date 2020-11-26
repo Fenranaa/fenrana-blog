@@ -2,6 +2,7 @@ package cn.fenrana.blog.controller.common;
 
 import cn.fenrana.blog.entity.Article;
 import cn.fenrana.blog.entity.Comment;
+import cn.fenrana.blog.entity.param.ArticlePageParam;
 import cn.fenrana.blog.service.IArticleService;
 import cn.fenrana.blog.service.IBlogService;
 import cn.fenrana.blog.service.ICommentService;
@@ -30,6 +31,7 @@ public class BlogController {
     @Autowired
     private IArticleService articleService;
 
+
     /**
      * 获取侧边栏的各种信息
      */
@@ -41,9 +43,10 @@ public class BlogController {
     /**
      * 查询首页的文章
      */
+    @ApiOperation("查询首页的文章")
     @GetMapping("/articles")
-    public ResultJson<Map<String, Object>> getArticles(@RequestParam("current") Long current) {
-        return blogService.getArticles(current);
+    public ResultJson<Map<String, Object>> getArticles(ArticlePageParam articlePageParam) {
+        return articleService.selectArticleByParam(articlePageParam);
     }
 
     /**
