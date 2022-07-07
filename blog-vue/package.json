@@ -16,7 +16,7 @@
     "js-cookie": "^2.2.1",
     "markd": "^1.2.0",
     "mavon-editor": "^2.9.1",
-    "moment": "^2.29.1",
+    "moment": "^2.29.4",
     "vue": "^2.6.12",
     "vue-axios": "^3.2.4",
     "vue-router": "^3.5.1",
